@@ -1,4 +1,4 @@
-package io.github.metrics_matcher.xyz;
+package io.github.metrics_matcher;
 
 import com.google.gson.Gson;
 import lombok.experimental.UtilityClass;

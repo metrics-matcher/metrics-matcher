@@ -1,8 +1,5 @@
 package io.github.metrics_matcher;
 
-import io.github.metrics_matcher.xyz.DataSource;
-import io.github.metrics_matcher.xyz.ConfigLoader;
-import io.github.metrics_matcher.xyz.MetricsProfile;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
