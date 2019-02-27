@@ -26,13 +26,14 @@ public class MetricsMatcher implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         loadDataSources();
         loadMetricsProfiles();
     }
 
     private void loadDataSources() {
         try {
-            List<DataSource> dataSources = ConfigLoader.loadDataSources("./data-sources.json");
+            List<DataSource> dataSources = ConfigLoader.loadDataSources();
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
                 dataSourceMenu.getItems().add(menuItem);
@@ -46,7 +47,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadMetricsProfiles() {
         try {
-            List<MetricsProfile> metricsProfiles = ConfigLoader.loadMetricsProfiles("./metrics-profiles.json");
+            List<MetricsProfile> metricsProfiles = ConfigLoader.loadMetricsProfiles();
             metricsProfiles.forEach(mp -> {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
                 metricsProfilesMenu.getItems().add(menuItem);

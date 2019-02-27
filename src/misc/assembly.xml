@@ -6,9 +6,24 @@
         <format>zip</format>
     </formats>
 
+
+    <fileSets>
+        <fileSet>
+            <directory>demo</directory>
+            <outputDirectory>/</outputDirectory>
+            <filtered>false</filtered>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
     <files>
         <file>
             <source>target/metrics-matcher.jar</source>
+        </file>
+        <file>
+            <source>src/misc/metrics-matcher.cmd</source>
         </file>
         <file>
             <source>src/main/resources/io/github/metrics_matcher/icon.png</source>
