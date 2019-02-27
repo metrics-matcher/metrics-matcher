@@ -20,30 +20,31 @@
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="Save report"/>
+                <MenuItem fx:id="saveReportMenuItem" text="Save report"/>
                 <SeparatorMenuItem/>
                 <MenuItem text="Exit"/>
             </Menu>
 
-            <Menu text="Data source">
+            <Menu fx:id="datasourceMenu" text="Data source">
                 <RadioMenuItem text="DEV" toggleGroup="$datasourceToggleGroup"/>
                 <RadioMenuItem text="TEST" toggleGroup="$datasourceToggleGroup"/>
                 <RadioMenuItem text="UAT" toggleGroup="$datasourceToggleGroup"/>
                 <RadioMenuItem text="PROD" toggleGroup="$datasourceToggleGroup"/>
             </Menu>
 
-            <Menu text="Metrics profile">
+            <Menu fx:id="testsMenu" text="Tests">
                 <CheckMenuItem text="Dummy study fast check"/>
                 <CheckMenuItem text="Dummy study full check"/>
             </Menu>
 
             <Menu text="Run" fx:id="runMenu">
                 <MenuItem text="Run" fx:id="runMenuItem" onAction="#runAction"/>
-                <MenuItem text="Stop" fx:id="stopMenuItem"  onAction="#stopAction" disable="true"/>
+                <MenuItem text="Stop" fx:id="stopMenuItem" onAction="#stopAction" disable="true"/>
                 <SeparatorMenuItem/>
                 <CheckMenuItem text="Stop on error"/>
                 <CheckMenuItem text="Stop on mismatch"/>
             </Menu>
+
             <Menu text="Help">
                 <MenuItem text="Help"/>
                 <MenuItem text="About"/>
