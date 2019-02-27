@@ -25,14 +25,9 @@
                 <MenuItem text="Exit"/>
             </Menu>
 
-            <Menu fx:id="datasourceMenu" text="Data source">
-                <RadioMenuItem text="DEV" toggleGroup="$datasourceToggleGroup"/>
-                <RadioMenuItem text="TEST" toggleGroup="$datasourceToggleGroup"/>
-                <RadioMenuItem text="UAT" toggleGroup="$datasourceToggleGroup"/>
-                <RadioMenuItem text="PROD" toggleGroup="$datasourceToggleGroup"/>
-            </Menu>
+            <Menu fx:id="dataSourceMenu" text="Data source"/>
 
-            <Menu fx:id="testsMenu" text="Tests">
+            <Menu fx:id="testsMenu" text="Metrics profile">
                 <CheckMenuItem text="Dummy study fast check"/>
                 <CheckMenuItem text="Dummy study full check"/>
             </Menu>
