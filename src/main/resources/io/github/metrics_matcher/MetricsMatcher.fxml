@@ -5,13 +5,48 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.CheckMenuItem?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
+    <fx:define>
+        <fx:define>
+            <ToggleGroup fx:id="datasourceToggleGroup"/>
+            <ToggleGroup fx:id="profilesToggleGroup"/>
+        </fx:define>
+    </fx:define>
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="Open"/>
                 <MenuItem text="Save report"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Exit"/>
+            </Menu>
+
+            <Menu text="Data source">
+                <RadioMenuItem text="DEV" toggleGroup="$datasourceToggleGroup"/>
+                <RadioMenuItem text="TEST" toggleGroup="$datasourceToggleGroup"/>
+                <RadioMenuItem text="UAT" toggleGroup="$datasourceToggleGroup"/>
+                <RadioMenuItem text="PROD" toggleGroup="$datasourceToggleGroup"/>
+            </Menu>
+
+            <Menu text="Metrics profile">
+                <CheckMenuItem text="Dummy study fast check"/>
+                <CheckMenuItem text="Dummy study full check"/>
+            </Menu>
+
+            <Menu text="Run">
+                <MenuItem text="Run"/>
+                <MenuItem text="Stop"/>
+                <SeparatorMenuItem/>
+                <CheckMenuItem text="Stop on error"/>
+                <CheckMenuItem text="Stop on mismatch"/>
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="Help"/>
+                <MenuItem text="About"/>
             </Menu>
         </MenuBar>
     </top>

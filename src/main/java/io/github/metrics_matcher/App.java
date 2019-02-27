@@ -34,7 +34,7 @@ public class App extends Application {
 
         final String version = getClass().getPackage().getImplementationVersion();
 
-        stage.setTitle("Metrics Matcher" + (version == null ? "" : " v" + version));
+        stage.setTitle("Metrics matcher" + (version == null ? "" : " v" + version));
         stage.show();
 
         SplashScreen splashScreen = SplashScreen.getSplashScreen();
