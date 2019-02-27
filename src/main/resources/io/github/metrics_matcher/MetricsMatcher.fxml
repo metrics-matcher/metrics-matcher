@@ -27,10 +27,7 @@
 
             <Menu fx:id="dataSourceMenu" text="Data source"/>
 
-            <Menu fx:id="testsMenu" text="Metrics profile">
-                <CheckMenuItem text="Dummy study fast check"/>
-                <CheckMenuItem text="Dummy study full check"/>
-            </Menu>
+            <Menu fx:id="metricsProfilesMenu" text="Metrics profiles"/>
 
             <Menu text="Run" fx:id="runMenu">
                 <MenuItem text="Run" fx:id="runMenuItem" onAction="#runAction"/>

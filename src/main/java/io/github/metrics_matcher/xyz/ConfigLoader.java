@@ -11,13 +11,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @UtilityClass
-public final class DataSources {
+public final class ConfigLoader {
 
-    public static List<DataSource> loadFromJsonFile(String filename) throws IOException {
-
+    public static List<DataSource> loadDataSources(String filename) throws IOException {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("demo", filename))) {
             Gson gson = new Gson();
             DataSource[] dataSources = gson.fromJson(reader, DataSource[].class);
+            return Arrays.asList(dataSources);
+        }
+    }
+
+    public static List<MetricsProfile> loadMetricsProfiles(String filename) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("demo", filename))) {
+            Gson gson = new Gson();
+            MetricsProfile[] dataSources = gson.fromJson(reader, MetricsProfile[].class);
             return Arrays.asList(dataSources);
         }
     }

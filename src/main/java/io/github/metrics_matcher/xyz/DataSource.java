@@ -4,12 +4,9 @@ import lombok.Value;
 
 @Value
 public class DataSource {
-    private final String name;
-    private final String url;
-
-    private final int timeout;
-
-    private final String username;
-    private final String password;
-
+    String name;
+    String url;
+    int timeout;
+    String username;
+    String password;
 }
