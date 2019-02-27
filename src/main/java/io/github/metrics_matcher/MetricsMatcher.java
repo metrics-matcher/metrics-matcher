@@ -61,7 +61,7 @@ public class MetricsMatcher implements Initializable {
     public void runAction(ActionEvent e) {
         log.debug("Run");
 
-        Xyz.ping(DataSource.of("Test", "jdbc:h2:.demo/test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
+        Xyz.ping(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
 
         runMenuItem.setDisable(true);
         stopMenuItem.setDisable(false);
