@@ -7,13 +7,14 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Log
+@Slf4j
 public class MetricsMatcher implements Initializable {
 
     public Menu runMenu;
@@ -31,7 +32,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadDataSources() {
         try {
-            List<DataSource> dataSources = ConfigLoader.loadDataSources("data-sources.json");
+            List<DataSource> dataSources = ConfigLoader.loadDataSources("./data-sources.json");
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
                 dataSourceMenu.getItems().add(menuItem);
@@ -45,7 +46,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadMetricsProfiles() {
         try {
-            List<MetricsProfile> metricsProfiles = ConfigLoader.loadMetricsProfiles("metrics-profiles.json");
+            List<MetricsProfile> metricsProfiles = ConfigLoader.loadMetricsProfiles("./metrics-profiles.json");
             metricsProfiles.forEach(mp -> {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
                 metricsProfilesMenu.getItems().add(menuItem);
@@ -58,7 +59,10 @@ public class MetricsMatcher implements Initializable {
     }
 
     public void runAction(ActionEvent e) {
-        System.out.println("run");
+        log.debug("Run");
+
+        Xyz.ping(DataSource.of("Test", "jdbc:h2:.demo/test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
+
         runMenuItem.setDisable(true);
         stopMenuItem.setDisable(false);
 

@@ -14,7 +14,7 @@ import java.util.List;
 public final class ConfigLoader {
 
     public static List<DataSource> loadDataSources(String filename) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("demo", filename))) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename))) {
             Gson gson = new Gson();
             DataSource[] dataSources = gson.fromJson(reader, DataSource[].class);
             return Arrays.asList(dataSources);
@@ -22,7 +22,7 @@ public final class ConfigLoader {
     }
 
     public static List<MetricsProfile> loadMetricsProfiles(String filename) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("demo", filename))) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename))) {
             Gson gson = new Gson();
             MetricsProfile[] dataSources = gson.fromJson(reader, MetricsProfile[].class);
             return Arrays.asList(dataSources);
