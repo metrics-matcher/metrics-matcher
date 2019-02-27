@@ -30,7 +30,7 @@ public class App extends Application {
 
         stage.setScene(new Scene(root, APP_WIDTH, APP_HEIGHT));
 
-//        stage.getIcons().addAll(new Image(getClass().getResourceAsStream("images/icon.png")));
+        stage.getIcons().addAll(new Image(getClass().getResourceAsStream("icon.png")));
 
         final String version = getClass().getPackage().getImplementationVersion();
 

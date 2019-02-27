@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.metrics_matcher</groupId>
     <artifactId>metrics-matcher</artifactId>
-    <version>1</version>
+    <version>1.0.1</version>
 
     <packaging>jar</packaging>
 
@@ -93,7 +93,7 @@
             </build>
         </profile-->
 
-        <!--profile>
+        <profile>
             <id>Archive</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -103,7 +103,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.1.1</version>
 
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
@@ -122,7 +122,7 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile-->
+        </profile>
     </profiles>
 
     <build>
@@ -142,7 +142,7 @@
                 <version>3.1.0</version>
             </plugin>
 
-            <!--plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.1.1</version>
@@ -158,14 +158,14 @@
                                 <exclude>META-INF/**</exclude>
                             </excludes>
                         </filter>
-                                            </filters>
+                    </filters>
 
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <manifestEntries>
-                                <Main-Class>io.github.metrics-matcher.App</Main-Class>
-                                <SplashScreen-Image>io/github/metrics-matcher/splash.png</SplashScreen-Image>
+                                <Main-Class>io.github.metrics_matcher.App</Main-Class>
+                                <SplashScreen-Image>io/github/metrics_matcher/splash.png</SplashScreen-Image>
                                 <Implementation-Version>${project.version}</Implementation-Version>
                             </manifestEntries>
                         </transformer>
@@ -180,7 +180,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin-->
+            </plugin>
         </plugins>
     </build>
 
