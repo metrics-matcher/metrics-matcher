@@ -37,9 +37,9 @@
                 <CheckMenuItem text="Dummy study full check"/>
             </Menu>
 
-            <Menu text="Run">
-                <MenuItem text="Run"/>
-                <MenuItem text="Stop"/>
+            <Menu text="Run" fx:id="runMenu">
+                <MenuItem text="Run" fx:id="runMenuItem" onAction="#runAction"/>
+                <MenuItem text="Stop" fx:id="stopMenuItem"  onAction="#stopAction" disable="true"/>
                 <SeparatorMenuItem/>
                 <CheckMenuItem text="Stop on error"/>
                 <CheckMenuItem text="Stop on mismatch"/>
