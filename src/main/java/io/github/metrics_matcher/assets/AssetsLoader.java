@@ -107,9 +107,6 @@ import lombok.Value;
 
 public class Main {
 
-
-
-
     public static void loadDrivers() throws Exception {
         final URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         final Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -127,11 +124,4 @@ public class Main {
                     }
                 });
     }
-
-    public static void main(String[] args) throws Exception {
-        loadQueries();
-//        loadDrivers();
-    }
-}
-
 */
