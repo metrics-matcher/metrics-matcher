@@ -38,7 +38,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadDataSources() {
         try {
-            List<DataSource> dataSources = AssetsLoader.loadDataSources();
+            List<DataSource> dataSources = AssetsLoader.loadDataSources("configs/data-sources.json");
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
                 dataSourceMenu.getItems().add(menuItem);

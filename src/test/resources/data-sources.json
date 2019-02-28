@@ -1,0 +1,16 @@
+[
+  {
+    "name": "DEV DB",
+    "url": "jdbc::dev",
+    "timeout": 300,
+    "username": "XXX",
+    "password": "YYY"
+  },
+  {
+    "name": "TEST DB",
+    "url": "jdbc::test",
+    "timeout": 300,
+    "username": "XXX",
+    "password": "YYY"
+  }
+]

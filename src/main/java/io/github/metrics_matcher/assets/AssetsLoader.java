@@ -20,8 +20,12 @@ import java.util.List;
 @UtilityClass
 public final class AssetsLoader {
 
-    public static List<DataSource> loadDataSources() throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("configs/data-sources.json"))) {
+    private static void checkFileExists() {
+
+    }
+
+    public static List<DataSource> loadDataSources(String filepath) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             Gson gson = new Gson();
             DataSource[] dataSources = gson.fromJson(reader, DataSource[].class);
             return Arrays.asList(dataSources);
@@ -43,7 +47,6 @@ public final class AssetsLoader {
         method.setAccessible(true);
         method.invoke(classLoader, url);
     }
-
 
 }
 

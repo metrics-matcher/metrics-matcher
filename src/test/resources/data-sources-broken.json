@@ -1,0 +1,7 @@
+[
+  {
+    "name": "DEV DB",
+    "url": "jdbc::dev",
+    "timeout": 300,
+    "username": "XXX",
+    "password": "YYY"
