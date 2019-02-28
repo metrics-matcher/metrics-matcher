@@ -50,7 +50,10 @@ public class AssetsLoaderTest {
         assertEquals(2, queries.size());
         assertEquals("select-1", queries.get(0).getId());
         assertEquals("Connection check", queries.get(0).getTitle());
+        assertEquals("SELECT 1 FROM DUAL", queries.get(0).getSql());
+
         assertEquals("select-1-notitle", queries.get(1).getId());
         assertNull(queries.get(1).getTitle());
+        assertEquals("SELECT 1 FROM DUAL", queries.get(1).getSql());
     }
 }

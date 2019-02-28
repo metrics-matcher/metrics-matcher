@@ -68,9 +68,10 @@ public final class AssetsLoader {
                 List<String> lines = Files.readAllLines(file.toPath());
                 String title = null;
                 if (!lines.isEmpty()) {
-                    String firstLine = lines.get(0);
+                    String firstLine = lines.get(0).trim();
                     if (firstLine.startsWith("--")) {
                         title = firstLine.substring(2).trim();
+                        lines.remove(0);
                     }
                 }
                 queries.add(Query.of(id, title, String.join("\n", lines)));
