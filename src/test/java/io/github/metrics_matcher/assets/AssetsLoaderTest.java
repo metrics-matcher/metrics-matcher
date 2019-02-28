@@ -32,8 +32,15 @@ public class AssetsLoaderTest {
     @Test
     public void loadDataSources_BrokenJson() {
         assertThrows(AssetError.class, () -> {
-            AssetsLoader.loadDataSources("src/test/resources/jsons/data-sources-broken.json");
+            AssetsLoader.loadDataSources("src/test/resources/jsons/broken.json");
         });
     }
 
+    @Test
+    public void loadMetricsProfiles_AllOk() throws AssetError {
+        List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles("src/test/resources/jsons/metrics-profiles.json");
+        assertEquals(2, metricsProfiles.size());
+        assertEquals("Dummy study fast check", metricsProfiles.get(0).getName());
+        assertEquals("Dummy study full check", metricsProfiles.get(1).getName());
+    }
 }
