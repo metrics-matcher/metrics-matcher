@@ -34,7 +34,6 @@ public final class AssetsLoader {
         }
     }
 
-
     public static List<DataSource> loadDataSources(String filepath) throws AssetError {
         log.info("Loading data sources from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
