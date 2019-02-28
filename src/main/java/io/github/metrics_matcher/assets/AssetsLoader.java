@@ -44,7 +44,7 @@ public final class AssetsLoader {
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse data [%s] ", filepath), e);
+            throw new AssetError(format("Can't parse json file [%s] ", filepath), e);
         }
     }
 
@@ -57,7 +57,7 @@ public final class AssetsLoader {
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse data [%s] ", filepath), e);
+            throw new AssetError(format("Can't parse json file [%s] ", filepath), e);
         }
     }
 
@@ -82,53 +82,34 @@ public final class AssetsLoader {
                 }
                 queries.add(Query.of(id, title, String.join("\n", lines)));
             } catch (IOException e) {
-                throw new AssetError(format("Can't read file [%s] in the [%s] ", filename, directory), e);
+                throw new AssetError(format("Can't read file [%s] from [%s] ", filename, directory), e);
             }
         }
         log.info("Loaded {} queries", queries.size());
         return queries;
     }
 
-    public static void loadDrivers() throws Exception {
-        URL url = new URL("jar", "", "file:drivers/h2-1.4.198.jar!/");
-        URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-        method.setAccessible(true);
-        method.invoke(classLoader, url);
-    }
+    public static void loadDrivers(String directory) throws AssetError {
+        log.info("Loading drivers from [{}]", directory);
+        List<File> files = listFiles(directory, ".jar");
 
+        try {
+            URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            method.setAccessible(true);
+
+            for (File file : files) {
+                String filename = file.getName();
+                log.info("Loading driver [{}]", filename);
+                try {
+                    method.invoke(classLoader, file.toURI().toURL());
+                } catch (Exception e) {
+                    throw new AssetError(format("Can't load file [%s] from [%s] ", filename, directory), e);
+                }
+            }
+        } catch (Exception e){
+            throw new AssetError(format("Can't load drivers from [%s]", directory), e);
+        }
+        log.info("Loaded {} drivers", files.size());
+    }
 }
-
-/*
-
-import lombok.Value;
-
-        import java.io.*;
-        import java.lang.reflect.Method;
-        import java.net.URL;
-        import java.net.URLClassLoader;
-        import java.nio.file.*;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.stream.Collectors;
-
-public class Main {
-
-    public static void loadDrivers() throws Exception {
-        final URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        final Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-        method.setAccessible(true);
-
-        Files.list(Paths.get("drivers"))
-                .filter(Files::isRegularFile)
-                .filter(file -> file.toString().endsWith(".jar"))
-                .forEach(jar -> {
-                    System.out.println("Loading library " + jar);
-                    try {
-                        method.invoke(classLoader, jar.toUri().toURL());
-                    } catch (Exception e) {
-                        System.out.println("Failed, " + e.getMessage());
-                    }
-                });
-    }
-*/

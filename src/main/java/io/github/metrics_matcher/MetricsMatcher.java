@@ -25,15 +25,10 @@ public class MetricsMatcher implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        try {
-            AssetsLoader.loadDrivers();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         loadDataSources();
         loadMetricsProfiles();
         loadQueries();
+        loadDrivers();
     }
 
     private void loadDataSources() {
@@ -67,6 +62,13 @@ public class MetricsMatcher implements Initializable {
     private void loadQueries() {
         try {
             List<Query> metricsProfiles = AssetsLoader.loadQueries("queries");
+        } catch (AssetError e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadDrivers() {
+        try {
+            AssetsLoader.loadDrivers("drivers");
         } catch (AssetError e) {
             e.printStackTrace();
         }
