@@ -79,6 +79,7 @@ public class MetricsMatcher implements Initializable {
     public void runAction(ActionEvent e) {
         log.debug("Run");
         try (Jdbc jdbc = new Jdbc()) {
+
             jdbc.execute(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
         } catch (SQLException e1) {
             e1.printStackTrace();

@@ -12,7 +12,7 @@ public class Jdbc implements AutoCloseable {
 
     private void connect(DataSource ds) throws SQLException {
         if (connection == null || connection.isClosed()) {
-            log.info("Opening JDBC connection to [{}]", ds.getUrl());
+            log.info("Opening JDBC connection [{}]", ds.getUrl());
             DriverManager.setLoginTimeout(ds.getTimeout());
             connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
             connection.setReadOnly(true);
@@ -30,9 +30,13 @@ public class Jdbc implements AutoCloseable {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
         ) {
+            log.info("Executing [{}]", sql);
             if (resultSet.next()) {
-                String tmp = resultSet.getString(1);
-                System.out.println(tmp);
+                Object tmp = resultSet.getObject(1);
+                log.info("Received [{}]", tmp);
+                return tmp;
+            } else {
+                log.warn("Empty result");
             }
         } catch (SQLException e) {
             e.printStackTrace();
