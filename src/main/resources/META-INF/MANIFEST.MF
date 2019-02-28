@@ -1,0 +1,2 @@
+Main-Class: io.github.metrics_matcher.App
+SplashScreen-Image: io/github/metrics_matcher/splash.png

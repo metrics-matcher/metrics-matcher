@@ -21,8 +21,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-//        LogManager.getLogManager().readConfiguration(getClass().getResourceAsStream("logger.properties"));
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MetricsMatcher.fxml"));
 
         MetricsMatcher controller = loader.getController();
