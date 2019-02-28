@@ -2,6 +2,8 @@ package io.github.metrics_matcher;
 
 import io.github.metrics_matcher.assets.AssetError;
 import io.github.metrics_matcher.assets.AssetsLoader;
+import io.github.metrics_matcher.assets.DataSource;
+import io.github.metrics_matcher.assets.MetricsProfile;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
@@ -10,7 +12,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -53,13 +54,13 @@ public class MetricsMatcher implements Initializable {
 
     private void loadMetricsProfiles() {
         try {
-            List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles();
+            List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
             metricsProfiles.forEach(mp -> {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
                 metricsProfilesMenu.getItems().add(menuItem);
             });
             //todo hint button on empty
-        } catch (IOException e) {
+        } catch (AssetError e) {
             //todo hint button
             e.printStackTrace();
         }

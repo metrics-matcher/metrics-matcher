@@ -1,7 +1,5 @@
 package io.github.metrics_matcher.assets;
 
-import io.github.metrics_matcher.DataSource;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;

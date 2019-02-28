@@ -1,4 +1,4 @@
-package io.github.metrics_matcher;
+package io.github.metrics_matcher.assets;
 
 import lombok.Value;
 

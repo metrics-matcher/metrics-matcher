@@ -2,8 +2,6 @@ package io.github.metrics_matcher.assets;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import io.github.metrics_matcher.DataSource;
-import io.github.metrics_matcher.MetricsProfile;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,11 +31,15 @@ public final class AssetsLoader {
         }
     }
 
-    public static List<MetricsProfile> loadMetricsProfiles() throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("configs", "metrics-profiles.json"))) {
+    public static List<MetricsProfile> loadMetricsProfiles(String filepath) throws AssetError {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             Gson gson = new Gson();
             MetricsProfile[] dataSources = gson.fromJson(reader, MetricsProfile[].class);
             return Arrays.asList(dataSources);
+        } catch (IOException e) {
+            throw new AssetError("Can't read file", e);
+        } catch (JsonParseException e) {
+            throw new AssetError("Can't parse data", e);
         }
     }
 
