@@ -36,8 +36,10 @@ public final class AssetsLoader {
 
 
     public static List<DataSource> loadDataSources(String filepath) throws AssetError {
+        log.info("Loading data sources from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             DataSource[] dataSources = GSON.fromJson(reader, DataSource[].class);
+            log.info("Loaded {} data sources", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
@@ -47,8 +49,10 @@ public final class AssetsLoader {
     }
 
     public static List<MetricsProfile> loadMetricsProfiles(String filepath) throws AssetError {
+        log.info("Loading metrics profiles from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             MetricsProfile[] dataSources = GSON.fromJson(reader, MetricsProfile[].class);
+            log.info("Loaded {} metrics profiles", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
@@ -58,12 +62,14 @@ public final class AssetsLoader {
     }
 
     public static List<Query> loadQueries(String directory) throws AssetError {
+        log.info("Loading queries from [{}]", directory);
         List<File> files = listFiles(directory, ".sql");
 
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
             String filename = file.getName();
             String id = filename.substring(0, filename.length() - 4).trim();
+            log.info("Loading query [{}]", id);
             try {
                 List<String> lines = Files.readAllLines(file.toPath());
                 String title = null;
