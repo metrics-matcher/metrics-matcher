@@ -1,15 +1,15 @@
 package io.github.metrics_matcher.assets;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import io.github.metrics_matcher.DataSource;
 import io.github.metrics_matcher.MetricsProfile;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -17,18 +17,19 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @UtilityClass
 public final class AssetsLoader {
 
-    private static void checkFileExists() {
-
-    }
-
-    public static List<DataSource> loadDataSources(String filepath) throws IOException {
+    public static List<DataSource> loadDataSources(String filepath) throws AssetError {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             Gson gson = new Gson();
             DataSource[] dataSources = gson.fromJson(reader, DataSource[].class);
             return Arrays.asList(dataSources);
+        } catch (IOException e) {
+            throw new AssetError("Can't read file", e);
+        } catch (JsonParseException e) {
+            throw new AssetError("Can't parse data", e);
         }
     }
 

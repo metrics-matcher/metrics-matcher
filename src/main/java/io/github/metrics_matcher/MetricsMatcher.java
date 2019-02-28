@@ -1,5 +1,6 @@
 package io.github.metrics_matcher;
 
+import io.github.metrics_matcher.assets.AssetError;
 import io.github.metrics_matcher.assets.AssetsLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -44,7 +45,7 @@ public class MetricsMatcher implements Initializable {
                 dataSourceMenu.getItems().add(menuItem);
             });
             //todo hint button on empty
-        } catch (IOException e) {
+        } catch (AssetError e) {
             //todo hint button
             e.printStackTrace();
         }
