@@ -1,9 +1,6 @@
 package io.github.metrics_matcher;
 
-import io.github.metrics_matcher.assets.AssetError;
-import io.github.metrics_matcher.assets.AssetsLoader;
-import io.github.metrics_matcher.assets.DataSource;
-import io.github.metrics_matcher.assets.MetricsProfile;
+import io.github.metrics_matcher.assets.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
@@ -36,6 +33,7 @@ public class MetricsMatcher implements Initializable {
         }
         loadDataSources();
         loadMetricsProfiles();
+        loadQueries();
     }
 
     private void loadDataSources() {
@@ -62,6 +60,14 @@ public class MetricsMatcher implements Initializable {
             //todo hint button on empty
         } catch (AssetError e) {
             //todo hint button
+            e.printStackTrace();
+        }
+    }
+
+    private void loadQueries() {
+        try {
+            List<Query> metricsProfiles = AssetsLoader.loadQueries("queries");
+        } catch (AssetError e) {
             e.printStackTrace();
         }
     }

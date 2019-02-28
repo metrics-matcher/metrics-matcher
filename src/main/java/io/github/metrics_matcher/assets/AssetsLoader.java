@@ -68,8 +68,8 @@ public final class AssetsLoader {
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
             String filename = file.getName();
+            log.info("Loading query [{}]", filename);
             String id = filename.substring(0, filename.length() - 4).trim();
-            log.info("Loading query [{}]", id);
             try {
                 List<String> lines = Files.readAllLines(file.toPath());
                 String title = null;
@@ -85,6 +85,7 @@ public final class AssetsLoader {
                 throw new AssetError(format("Can't read file [%s] in the [%s] ", filename, directory), e);
             }
         }
+        log.info("Loaded {} queries", queries.size());
         return queries;
     }
 
