@@ -43,4 +43,14 @@ public class AssetsLoaderTest {
         assertEquals("Dummy study fast check", metricsProfiles.get(0).getName());
         assertEquals("Dummy study full check", metricsProfiles.get(1).getName());
     }
+
+    @Test
+    void loadQueries() throws AssetError {
+        List<Query> queries = AssetsLoader.loadQueries("src/test/resources/sqls");
+        assertEquals(2, queries.size());
+        assertEquals("select-1", queries.get(0).getId());
+        assertEquals("Connection check", queries.get(0).getTitle());
+        assertEquals("select-1-notitle", queries.get(1).getId());
+        assertNull(queries.get(1).getTitle());
+    }
 }
