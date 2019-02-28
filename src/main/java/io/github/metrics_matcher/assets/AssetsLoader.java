@@ -43,7 +43,7 @@ public final class AssetsLoader {
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse json file [%s] ", filepath), e);
+            throw new AssetError(format("Can't parse JSON file [%s] ", filepath), e);
         }
     }
 
@@ -56,7 +56,7 @@ public final class AssetsLoader {
         } catch (IOException e) {
             throw new AssetError(format("Can't read file [%s] ", filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse json file [%s] ", filepath), e);
+            throw new AssetError(format("Can't parse JSON file [%s] ", filepath), e);
         }
     }
 

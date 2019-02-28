@@ -10,6 +10,7 @@ import javafx.scene.control.RadioMenuItem;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -66,6 +67,7 @@ public class MetricsMatcher implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void loadDrivers() {
         try {
             AssetsLoader.loadDrivers("drivers");
@@ -76,8 +78,12 @@ public class MetricsMatcher implements Initializable {
 
     public void runAction(ActionEvent e) {
         log.debug("Run");
+        try (Jdbc jdbc = new Jdbc()) {
+            jdbc.execute(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
 
-        Xyz.ping(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
 
         runMenuItem.setDisable(true);
         stopMenuItem.setDisable(false);
