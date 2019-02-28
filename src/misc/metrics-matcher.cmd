@@ -1,1 +1,1 @@
-java -cp drivers/* -jar metrics-matcher.jar
+java -jar metrics-matcher.jar

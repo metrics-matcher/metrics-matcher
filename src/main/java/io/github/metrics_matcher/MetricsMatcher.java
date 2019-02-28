@@ -27,6 +27,11 @@ public class MetricsMatcher implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        try {
+            ConfigLoader.loadDrivers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         loadDataSources();
         loadMetricsProfiles();
     }
