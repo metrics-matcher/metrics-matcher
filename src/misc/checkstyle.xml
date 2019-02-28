@@ -78,12 +78,6 @@
         <module name="UnnecessaryParentheses"/>
         <module name="VariableDeclarationUsageDistance"/>
 
-        <!-- Imports: http://checkstyle.sourceforge.net/config_imports.html -->
-        <module name="ImportControl">
-            <property name="file" value="src/misc/import-control.xml"/>
-            <property name="path" value="^.*[\\/]src[\\/]main[\\/].*$"/>
-        </module>
-
         <!--<module name="IllegalImport">-->
             <!--<property name="illegalPkgs" value="sun,com.google"/>-->
             <!--<property name="regexp" value="true"/>-->

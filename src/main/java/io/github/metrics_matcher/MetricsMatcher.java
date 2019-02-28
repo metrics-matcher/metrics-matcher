@@ -1,12 +1,12 @@
 package io.github.metrics_matcher;
 
+import io.github.metrics_matcher.assets.AssetsLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class MetricsMatcher implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         try {
-            ConfigLoader.loadDrivers();
+            AssetsLoader.loadDrivers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadDataSources() {
         try {
-            List<DataSource> dataSources = ConfigLoader.loadDataSources();
+            List<DataSource> dataSources = AssetsLoader.loadDataSources();
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
                 dataSourceMenu.getItems().add(menuItem);
@@ -52,7 +52,7 @@ public class MetricsMatcher implements Initializable {
 
     private void loadMetricsProfiles() {
         try {
-            List<MetricsProfile> metricsProfiles = ConfigLoader.loadMetricsProfiles();
+            List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles();
             metricsProfiles.forEach(mp -> {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
                 metricsProfilesMenu.getItems().add(menuItem);
