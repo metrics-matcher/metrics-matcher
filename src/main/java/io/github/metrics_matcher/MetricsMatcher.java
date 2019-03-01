@@ -23,6 +23,7 @@ public class MetricsMatcher implements Initializable {
     public Menu metricsProfilesMenu;
     public MenuItem saveReportMenuItem;
     public Menu dataSourceMenu;
+    public MenuItem reloadMenuItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -102,5 +103,9 @@ public class MetricsMatcher implements Initializable {
         metricsProfilesMenu.getItems().forEach(menuItem -> menuItem.setDisable(false));
         dataSourceMenu.getItems().forEach(menuItem -> menuItem.setDisable(false));
 
+    }
+
+    public void showNotImplemented() {
+        NotImplementedDialog.show();
     }
 }

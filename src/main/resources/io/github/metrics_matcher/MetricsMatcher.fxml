@@ -20,9 +20,11 @@
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem fx:id="saveReportMenuItem" text="Save report"/>
+                <MenuItem fx:id="reloadMenuItem" text="Synchronize" onAction="#showNotImplemented"/>
                 <SeparatorMenuItem/>
-                <MenuItem text="Exit"/>
+                <MenuItem fx:id="saveReportMenuItem" text="Save report" onAction="#showNotImplemented"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Exit" onAction="#showNotImplemented"/>
             </Menu>
 
             <Menu fx:id="dataSourceMenu" text="Data source"/>
@@ -33,13 +35,13 @@
                 <MenuItem text="Run" fx:id="runMenuItem" onAction="#runAction"/>
                 <MenuItem text="Stop" fx:id="stopMenuItem" onAction="#stopAction" disable="true"/>
                 <SeparatorMenuItem/>
-                <CheckMenuItem text="Stop on error"/>
-                <CheckMenuItem text="Stop on mismatch"/>
+                <CheckMenuItem text="Stop on error" onAction="#showNotImplemented"/>
+                <CheckMenuItem text="Stop on mismatch" onAction="#showNotImplemented"/>
             </Menu>
 
             <Menu text="Help">
-                <MenuItem text="Help"/>
-                <MenuItem text="About"/>
+                <MenuItem text="Help" onAction="#showNotImplemented"/>
+                <MenuItem text="About" onAction="#showNotImplemented"/>
             </Menu>
         </MenuBar>
     </top>
