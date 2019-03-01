@@ -20,7 +20,7 @@
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem fx:id="reloadMenuItem" text="Synchronize" onAction="#showNotImplemented"/>
+                <MenuItem fx:id="reloadMenuItem" text="Synchronize" onAction="#synchronizeAction"/>
                 <SeparatorMenuItem/>
                 <MenuItem fx:id="saveReportMenuItem" text="Save report" onAction="#showNotImplemented"/>
                 <SeparatorMenuItem/>

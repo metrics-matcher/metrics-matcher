@@ -1,6 +1,8 @@
 package io.github.metrics_matcher;
 
 import io.github.metrics_matcher.assets.*;
+import io.github.metrics_matcher.dialogs.AssetErrorDialog;
+import io.github.metrics_matcher.dialogs.NotImplementedDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
@@ -28,7 +30,7 @@ public class MetricsMatcher implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadDataSources();
-        loadMetricsProfiles();
+        reloadMetricsProfiles();
         loadQueries();
         loadDrivers();
     }
@@ -47,7 +49,8 @@ public class MetricsMatcher implements Initializable {
         }
     }
 
-    private void loadMetricsProfiles() {
+    private void reloadMetricsProfiles() {
+        metricsProfilesMenu.getItems().clear();
         try {
             List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
             metricsProfiles.forEach(mp -> {
@@ -56,8 +59,7 @@ public class MetricsMatcher implements Initializable {
             });
             //todo hint button on empty
         } catch (AssetError e) {
-            //todo hint button
-            e.printStackTrace();
+            AssetErrorDialog.show(e);
         }
     }
 
@@ -107,5 +109,9 @@ public class MetricsMatcher implements Initializable {
 
     public void showNotImplemented() {
         NotImplementedDialog.show();
+    }
+
+    public void synchronizeAction() {
+        reloadMetricsProfiles();
     }
 }

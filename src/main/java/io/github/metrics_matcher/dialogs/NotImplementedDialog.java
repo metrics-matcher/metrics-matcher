@@ -1,4 +1,4 @@
-package io.github.metrics_matcher;
+package io.github.metrics_matcher.dialogs;
 
 import javafx.scene.control.Alert;
 
@@ -8,8 +8,6 @@ public class NotImplementedDialog {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Not implemented");
         alert.setHeaderText("This feature is not yet implemented");
-//        alert.setContentText(e.getMessage());
-
         alert.showAndWait();
     }
 }
