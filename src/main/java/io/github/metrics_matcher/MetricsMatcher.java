@@ -41,7 +41,7 @@ public class MetricsMatcher implements Initializable {
                 dataSourceMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read datasources", e, "Datasource");
+            AssetErrorDialog.show("Can't read datasources", e, "#data-sources");
         }
     }
 
@@ -54,7 +54,7 @@ public class MetricsMatcher implements Initializable {
                 metricsProfilesMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read metrics profiles", e, "TODO");
+            AssetErrorDialog.show("Can't read metrics profiles", e, "#metrics-profiles");
         }
     }
 
@@ -62,7 +62,7 @@ public class MetricsMatcher implements Initializable {
         try {
             List<Query> queries = AssetsLoader.loadQueries("queries");
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read queries", e, "TODO");
+            AssetErrorDialog.show("Can't read queries", e, "#queries");
         }
     }
 
@@ -70,7 +70,7 @@ public class MetricsMatcher implements Initializable {
         try {
             AssetsLoader.loadDrivers("drivers");
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't load drivers", e, "TODO");
+            AssetErrorDialog.show("Can't load drivers", e, "#drivers");
         }
     }
 
