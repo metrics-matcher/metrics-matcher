@@ -24,7 +24,7 @@
                 <SeparatorMenuItem/>
                 <MenuItem fx:id="saveReportMenuItem" text="Save report" onAction="#showNotImplemented"/>
                 <SeparatorMenuItem/>
-                <MenuItem text="Exit" onAction="#showNotImplemented"/>
+                <MenuItem text="Exit" onAction="#exitAction"/>
             </Menu>
 
             <Menu fx:id="dataSourceMenu" text="Data source"/>

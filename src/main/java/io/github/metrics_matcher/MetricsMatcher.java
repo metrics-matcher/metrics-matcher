@@ -3,6 +3,7 @@ package io.github.metrics_matcher;
 import io.github.metrics_matcher.assets.*;
 import io.github.metrics_matcher.dialogs.AssetErrorDialog;
 import io.github.metrics_matcher.dialogs.NotImplementedDialog;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
@@ -111,5 +112,9 @@ public class MetricsMatcher implements Initializable {
         reloadDataSources();
         reloadMetricsProfiles();
         loadQueries();
+    }
+
+    public void exitAction() {
+        Platform.exit();
     }
 }
