@@ -22,6 +22,8 @@ import static java.lang.String.format;
 @Slf4j
 @UtilityClass
 public final class AssetsLoader {
+    private static final String CAN_NOT_READ = "Can't read \"%s\"";
+    private static final String CAN_NOT_PARSE = "Can't parse: %s";
 
     private static Gson GSON = new Gson();
 
@@ -41,9 +43,9 @@ public final class AssetsLoader {
             log.info("Loaded {} data sources", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
-            throw new AssetError(format("Can't read file [%s] ", filepath), e);
+            throw new AssetError(format(CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse JSON file [%s] ", filepath), e);
+            throw new AssetError(format(CAN_NOT_PARSE, filepath), e);
         }
     }
 
@@ -54,9 +56,9 @@ public final class AssetsLoader {
             log.info("Loaded {} metrics profiles", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
-            throw new AssetError(format("Can't read file [%s] ", filepath), e);
+            throw new AssetError(format(CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format("Can't parse JSON file [%s] ", filepath), e);
+            throw new AssetError(format(CAN_NOT_PARSE, filepath), e);
         }
     }
 
@@ -106,7 +108,7 @@ public final class AssetsLoader {
                     throw new AssetError(format("Can't load file [%s] from [%s] ", filename, directory), e);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AssetError(format("Can't load drivers from [%s]", directory), e);
         }
         log.info("Loaded {} drivers", files.size());
