@@ -22,8 +22,8 @@ import static java.lang.String.format;
 @Slf4j
 @UtilityClass
 public final class AssetsLoader {
-    private static final String CAN_NOT_READ = "Can't read \"%s\"";
-    private static final String CAN_NOT_PARSE = "Can't parse: %s";
+    private static final String CAN_NOT_READ = "Can't read file \"%s\"";
+    private static final String CAN_NOT_PARSE = "Can't parse file \"%s\"";
 
     private static Gson GSON = new Gson();
 
@@ -65,7 +65,9 @@ public final class AssetsLoader {
     public static List<Query> loadQueries(String directory) throws AssetError {
         log.info("Loading queries from [{}]", directory);
         List<File> files = listFiles(directory, ".sql");
-
+        if (files.isEmpty()) {
+            throw new AssetError(format("Files not found in \"%s\"", directory));
+        }
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
             String filename = file.getName();
@@ -83,7 +85,7 @@ public final class AssetsLoader {
                 }
                 queries.add(Query.of(id, title, String.join("\n", lines)));
             } catch (IOException e) {
-                throw new AssetError(format("Can't read file [%s] from [%s] ", filename, directory), e);
+                throw new AssetError(format(CAN_NOT_READ, filename), e);
             }
         }
         log.info("Loaded {} queries", queries.size());

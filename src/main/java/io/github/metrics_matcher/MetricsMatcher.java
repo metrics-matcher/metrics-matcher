@@ -29,23 +29,20 @@ public class MetricsMatcher implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadDataSources();
-        reloadMetricsProfiles();
-        loadQueries();
-        loadDrivers();
+        synchronizeAction();
+//        loadQueries();
+//        loadDrivers();
     }
 
-    private void loadDataSources() {
+    private void reloadDataSources() {
         try {
             List<DataSource> dataSources = AssetsLoader.loadDataSources("configs/data-sources.json");
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
                 dataSourceMenu.getItems().add(menuItem);
             });
-            //todo hint button on empty
         } catch (AssetError e) {
-            //todo hint button
-            e.printStackTrace();
+            AssetErrorDialog.show("Can't read datasources", e);
         }
     }
 
@@ -57,17 +54,16 @@ public class MetricsMatcher implements Initializable {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
                 metricsProfilesMenu.getItems().add(menuItem);
             });
-            //todo hint button on empty
         } catch (AssetError e) {
-            AssetErrorDialog.show(e);
+            AssetErrorDialog.show("Can't read metrics profiles", e);
         }
     }
 
     private void loadQueries() {
         try {
-            List<Query> metricsProfiles = AssetsLoader.loadQueries("queries");
+            List<Query> queries = AssetsLoader.loadQueries("queries");
         } catch (AssetError e) {
-            e.printStackTrace();
+            AssetErrorDialog.show("Can't read queries", e);
         }
     }
 
@@ -112,6 +108,8 @@ public class MetricsMatcher implements Initializable {
     }
 
     public void synchronizeAction() {
+        reloadDataSources();
         reloadMetricsProfiles();
+        loadQueries();
     }
 }
