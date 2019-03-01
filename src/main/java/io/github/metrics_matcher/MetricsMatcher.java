@@ -42,7 +42,7 @@ public class MetricsMatcher implements Initializable {
                 dataSourceMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read datasources", e);
+            AssetErrorDialog.show("Can't read datasources", e, "Datasource");
         }
     }
 
@@ -55,7 +55,7 @@ public class MetricsMatcher implements Initializable {
                 metricsProfilesMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read metrics profiles", e);
+            AssetErrorDialog.show("Can't read metrics profiles", e, "TODO");
         }
     }
 
@@ -63,7 +63,7 @@ public class MetricsMatcher implements Initializable {
         try {
             List<Query> queries = AssetsLoader.loadQueries("queries");
         } catch (AssetError e) {
-            AssetErrorDialog.show("Can't read queries", e);
+            AssetErrorDialog.show("Can't read queries", e, "TODO");
         }
     }
 
