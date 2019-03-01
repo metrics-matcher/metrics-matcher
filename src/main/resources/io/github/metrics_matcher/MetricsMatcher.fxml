@@ -9,6 +9,12 @@
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
     <fx:define>
@@ -47,6 +53,20 @@
     </top>
 
     <center>
+        <TableView/>
     </center>
 
+    <bottom>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="3" right="10" bottom="3" left="5"/>
+            </padding>
+
+            <Label text="Data source:"/>
+
+            <Separator orientation="VERTICAL"/>
+            <Button text="Run" onAction="#runAction"/>
+        </HBox>
+
+    </bottom>
 </BorderPane>

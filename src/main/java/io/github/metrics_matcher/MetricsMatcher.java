@@ -31,8 +31,6 @@ public class MetricsMatcher implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         synchronizeAction();
-//        loadQueries();
-//        loadDrivers();
     }
 
     private void reloadDataSources() {
@@ -72,19 +70,17 @@ public class MetricsMatcher implements Initializable {
         try {
             AssetsLoader.loadDrivers("drivers");
         } catch (AssetError e) {
-            e.printStackTrace();
+            AssetErrorDialog.show("Can't load drivers", e, "TODO");
         }
     }
 
     public void runAction(ActionEvent e) {
         log.debug("Run");
         try (Jdbc jdbc = new Jdbc()) {
-
-            jdbc.execute(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
+            Object result = jdbc.execute(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
-
 
         runMenuItem.setDisable(true);
         stopMenuItem.setDisable(false);
@@ -112,6 +108,7 @@ public class MetricsMatcher implements Initializable {
         reloadDataSources();
         reloadMetricsProfiles();
         loadQueries();
+        loadDrivers();
     }
 
     public void exitAction() {

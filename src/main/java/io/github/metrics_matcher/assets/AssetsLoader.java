@@ -24,6 +24,7 @@ import static java.lang.String.format;
 public final class AssetsLoader {
     private static final String CAN_NOT_READ = "Can't read file \"%s\"";
     private static final String CAN_NOT_PARSE = "Can't parse file \"%s\"";
+    private static final String FILES_NOT_FOUND = "Files not found in \"%s\"";
 
     private static Gson GSON = new Gson();
 
@@ -66,7 +67,7 @@ public final class AssetsLoader {
         log.info("Loading queries from [{}]", directory);
         List<File> files = listFiles(directory, ".sql");
         if (files.isEmpty()) {
-            throw new AssetError(format("Files not found in \"%s\"", directory));
+            throw new AssetError(format(FILES_NOT_FOUND, directory));
         }
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
@@ -95,7 +96,9 @@ public final class AssetsLoader {
     public static void loadDrivers(String directory) throws AssetError {
         log.info("Loading drivers from [{}]", directory);
         List<File> files = listFiles(directory, ".jar");
-
+        if (files.isEmpty()) {
+            throw new AssetError(format(FILES_NOT_FOUND, directory));
+        }
         try {
             URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -107,11 +110,11 @@ public final class AssetsLoader {
                 try {
                     method.invoke(classLoader, file.toURI().toURL());
                 } catch (Exception e) {
-                    throw new AssetError(format("Can't load file [%s] from [%s] ", filename, directory), e);
+                    throw new AssetError(format("Can't load driver \"%s\"", filename), e);
                 }
             }
         } catch (Exception e) {
-            throw new AssetError(format("Can't load drivers from [%s]", directory), e);
+            throw new AssetError(format("Can't load drivers from \"%s\"", directory), e);
         }
         log.info("Loaded {} drivers", files.size());
     }

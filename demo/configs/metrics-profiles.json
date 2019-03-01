@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Dummy study fast check",
+    "params": {
+      "studyId": "DUMMY_STUDY"
+    },
+    "metrics": {
+      "patients-total": 234,
+      "patients-dosed": 123
+    }
+  },
+  {
+    "name": "Dummy study full check",
+    "params": {
+      "studyId": "DUMMY_STUDY"
+    },
+    "metrics": {
+      "patients-total": 234,
+      "patients-dosed": 123,
+      "patients-min-age": 20,
+      "patients-max-age": 80
+    }
+  },
+  {
+    "name": "XXXx"
+  }
+]
