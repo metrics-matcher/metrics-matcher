@@ -7,6 +7,7 @@ import io.github.metrics_matcher.table.ResultRow;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -64,18 +65,41 @@ public class MetricsMatcher implements Initializable {
                         .query("select-1-notitle")
                         .expectedValue("1")
                         .actualValue("1")
-                        .executionStatus("FAILED")
+                        .executionStatus("FAIL")
                         .executionTime(1.23)
                         .build(),
                 ResultRow.builder()
                         .metricsProfile("Dummy study full check")
                         .query("select-1-notitle")
                         .expectedValue("1")
-                        .actualValue("1")
+                        .actualValue("Oralce error: #123")
                         .executionStatus("ERROR")
                         .executionTime(1.23)
                         .build()
         );
+
+        PseudoClass failRowPseudoClass = PseudoClass.getPseudoClass("fail");
+        PseudoClass errorRowPseudoClass = PseudoClass.getPseudoClass("error");
+
+        table.setRowFactory(tv -> new TableRow<ResultRow>() {
+            @Override
+            public void updateItem(ResultRow item, boolean empty) {
+                super.updateItem(item, empty);
+                pseudoClassStateChanged(failRowPseudoClass, false);
+                pseudoClassStateChanged(errorRowPseudoClass, false);
+
+                if (!empty) {
+                    switch (item.getExecutionStatus()) {
+                        case "FAIL":
+                            pseudoClassStateChanged(failRowPseudoClass, true);
+                            break;
+                        case "ERROR":
+                            pseudoClassStateChanged(errorRowPseudoClass, true);
+                            break;
+                    }
+                }
+            }
+        });
 
         table.setItems(results);
     }

@@ -1,21 +1,28 @@
-TableView .table-cell {
-    -fx-border-width: 0 1 1 0;
-    -fx-background-insets: 0;
-    -fx-border-insets: 0;
-    -fx-border-color: #CCC;
+TableView {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-TableView .table-cell.-mm-rownum,
-TableView .table-row-cell:selected .table-cell:filled.-mm-rownum {
-    -fx-background-color: -fx-body-color-to-right;
-    -fx-border-color: #CCC;
-    -fx-text-fill: #333;
-}
 
+/*TableView .table-cell {*/
+    /*-fx-border-width: 0 1 1 0;*/
+    /*-fx-background-insets: 0;*/
+    /*-fx-border-insets: 0;*/
+    /*-fx-border-color: #CCC;*/
+/*}*/
+
+/*TableView .table-cell.-mm-rownum,*/
+/*TableView .table-row-cell:selected .table-cell:filled.-mm-rownum {*/
+    /*-fx-background-color: -fx-body-color-to-right;*/
+    /*-fx-border-color: #CCC;*/
+    /*-fx-text-fill: #333;*/
+/*}*/
+
+/*
 TableView.table-row-cell:filled:selected,
 TableView:focused .table-row-cell:filled:selected {
     -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
-    -fx-table-cell-border-color: white;
+    -fx-table-cell-border-color: #00F;
 }
 
 
@@ -26,4 +33,16 @@ TableView:focused .table-row-cell:selected .table-cell:filled {
     -fx-text-fill: #fff;
     -fx-border-color: #fff;
     -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
+}
+*/
+
+.table-row-cell:selected {
+    -fx-border-color: blue;
+}
+
+TableView .table-row-cell:fail .table-cell {
+    -fx-background-color: pink;
+}
+TableView .table-row-cell:error .table-cell {
+    -fx-background-color: red;
 }
