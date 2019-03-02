@@ -1,0 +1,34 @@
+TableView {
+    /*-fx-background-insets: 0;*/
+    /*-fx-padding: 0;*/
+}
+
+TableView .table-cell {
+    -fx-border-width: 0 1 0 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #ccc;
+}
+
+TableView .table-cell.-mm-rownum,
+TableView .table-row-cell:selected .table-cell:filled.-mm-rownum {
+    -fx-background-color: -fx-body-color-to-right;
+    -fx-border-color: darkgray;
+    -fx-text-fill: #333333;
+}
+
+TableView.table-row-cell:filled:selected,
+TableView:focused .table-row-cell:filled:selected {
+    -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
+    -fx-table-cell-border-color: white;
+}
+
+
+TableView .table-row-cell:selected .table-cell:filled,
+TableView:focused .table-row-cell:selected .table-cell:filled {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-text-fill: #fff;
+    -fx-border-color: #fff;
+    -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
+}

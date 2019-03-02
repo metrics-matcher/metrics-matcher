@@ -3,7 +3,10 @@ package io.github.metrics_matcher;
 import io.github.metrics_matcher.assets.*;
 import io.github.metrics_matcher.dialogs.AssetErrorDialog;
 import io.github.metrics_matcher.dialogs.NotImplementedDialog;
+import io.github.metrics_matcher.table.ResultRow;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,14 +27,41 @@ public class MetricsMatcher implements Initializable {
     public MenuItem saveReportMenuItem;
     public Menu dataSourceMenu;
     public MenuItem reloadMenuItem;
-    public TableView table;
+    public TableView<ResultRow> table;
+    public TableColumn rownumColumn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         synchronizeAction();
+        createTable();
     }
 
+
     private void createTable() {
+        rownumColumn.setCellFactory(column -> new TableCell<ResultRow, String>() {
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(Integer.toString(getIndex() + 1));
+                }
+                getStyleClass().add("-mm-rownum");
+            }
+        });
+
+        ObservableList<ResultRow> results = FXCollections.observableArrayList(
+                ResultRow.builder()
+                        .metricsProfile("mp")
+                        .query("Query")
+                        .expectedValue("123")
+                        .actualValue("234")
+                        .executionStatus("OK")
+                        .executionTime(1.23)
+                        .build()
+        );
+
+        table.setItems(results);
     }
 
     private void reloadDataSources() {

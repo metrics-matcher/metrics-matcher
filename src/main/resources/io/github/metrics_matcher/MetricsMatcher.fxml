@@ -18,6 +18,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.collections.FXCollections?>
 <?import io.github.metrics_matcher.table.ResultRow?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
     <fx:define>
@@ -56,21 +57,40 @@
     </top>
 
     <center>
-        <TableView fx:id="table" >
+        <TableView fx:id="table">
             <columns>
-                <TableColumn text="Metrics profile"/>
-                <TableColumn text="Query"/>
-                <TableColumn text="Expected value"/>
-                <TableColumn text="Actual value"/>
-                <TableColumn text="Execution status"/>
-                <TableColumn text="Execution time"/>
+                <TableColumn fx:id="rownumColumn" text="#" prefWidth="30"/>
+                <TableColumn text="Metrics profile">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="metricsProfile"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Query">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="query"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Expected value">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="expectedValue"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Actual value">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="actualValue"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Execution status">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="executionStatus"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Execution time">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="executionTime"/>
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <ResultRow />
-
-                </FXCollections>
-            </items>
         </TableView>
     </center>
 
