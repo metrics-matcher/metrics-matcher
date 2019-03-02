@@ -1,0 +1,2 @@
+-- Select date
+SELECT DATE '2019-02-28' FROM DUAL

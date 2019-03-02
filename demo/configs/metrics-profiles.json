@@ -1,12 +1,12 @@
 [
   {
-    "name": "Dummy study fast check",
-    "params": {
-      "studyId": "DUMMY_STUDY"
-    },
+    "name": "All queries",
     "metrics": {
-      "patients-total": 234,
-      "patients-dosed": 123
+      "select-date": "2019-02-28",
+      "select-float": 123.456,
+      "select-integer": 123,
+      "select-notitle": 1,
+      "select-string": "Abc123"
     }
   },
   {
@@ -20,8 +20,5 @@
       "patients-min-age": 20,
       "patients-max-age": 80
     }
-  },
-  {
-    "name": "XXXx"
   }
 ]

@@ -1,16 +1,14 @@
 [
   {
-    "name": "DEV",
-    "url": "jdbc::dev",
-    "timeout": 300,
-    "username": "XXX",
-    "password": "YYY"
+    "name": "DEV DB (H2)",
+    "url": "jdbc:h2:mem",
+    "username": "user",
+    "password": "pass"
   },
   {
-    "name": "TEST",
-    "url": "jdbc::test",
-    "timeout": 300,
-    "username": "XXX",
-    "password": "YYY"
+    "name": "TEST DB (Oracle, broken)",
+    "url": "jdbc:oracle:thin:@//myhost:1521/orcl",
+    "username": "user",
+    "password": "pass"
   }
 ]
