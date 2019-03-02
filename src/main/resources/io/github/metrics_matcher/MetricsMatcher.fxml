@@ -19,18 +19,13 @@
 <?import javafx.collections.FXCollections?>
 <?import io.github.metrics_matcher.table.ResultRow?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.Tooltip?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
-    <fx:define>
-        <fx:define>
-            <ToggleGroup fx:id="datasourceToggleGroup"/>
-            <ToggleGroup fx:id="profilesToggleGroup"/>
-        </fx:define>
-    </fx:define>
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem fx:id="reloadMenuItem" text="Synchronize" onAction="#synchronizeAction"/>
+                <MenuItem fx:id="synchronizeMenuItem" text="Synchronize" onAction="#synchronizeAction"/>
                 <SeparatorMenuItem/>
                 <MenuItem fx:id="saveReportMenuItem" text="Save report" onAction="#showNotImplemented"/>
                 <SeparatorMenuItem/>
@@ -50,7 +45,7 @@
             </Menu>
 
             <Menu text="Help">
-                <MenuItem text="Help" onAction="#showNotImplemented"/>
+                <MenuItem text="Online help" onAction="#showNotImplemented"/>
                 <MenuItem text="About" onAction="#showNotImplemented"/>
             </Menu>
         </MenuBar>
@@ -101,6 +96,11 @@
             </padding>
 
             <Label text="Data source:"/>
+            <Label fx:id="selectedDataSourceLabel" minWidth="15">
+                <tooltip>
+                    <Tooltip fx:id="selectedDataSourceTooltip"/>
+                </tooltip>
+            </Label>
 
             <Separator orientation="VERTICAL"/>
             <Button text="Run" onAction="#runAction"/>
