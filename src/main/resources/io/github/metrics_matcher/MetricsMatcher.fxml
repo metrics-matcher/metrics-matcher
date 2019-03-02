@@ -17,7 +17,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.collections.FXCollections?>
-<?import io.github.metrics_matcher.table.ResultRow?>
+<?import io.github.metrics_matcher.table.ScopeRow?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Tooltip?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"

@@ -3,9 +3,8 @@ package io.github.metrics_matcher;
 import io.github.metrics_matcher.assets.*;
 import io.github.metrics_matcher.dialogs.AssetErrorDialog;
 import io.github.metrics_matcher.dialogs.NotImplementedDialog;
-import io.github.metrics_matcher.table.ResultRow;
+import io.github.metrics_matcher.table.ScopeRow;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -29,8 +28,8 @@ public class MetricsMatcher implements Initializable {
     public MenuItem saveReportMenuItem;
     public Menu dataSourceMenu;
     public MenuItem synchronizeMenuItem;
-    public TableView<ResultRow> table;
-    public TableColumn<ResultRow, String> rownumColumn;
+    public TableView<ScopeRow> table;
+    public TableColumn<ScopeRow, String> rownumColumn;
     public Label selectedDataSourceLabel;
     public Tooltip selectedDataSourceTooltip;
 
@@ -38,6 +37,8 @@ public class MetricsMatcher implements Initializable {
 
     public final StringProperty selectedDataSourceText = new SimpleStringProperty();
     public final StringProperty selectedDataSourceTooltipText = new SimpleStringProperty();
+
+    private ObservableList<ScopeRow> scopeOfWork = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,7 +53,7 @@ public class MetricsMatcher implements Initializable {
     }
 
     private void createTable() {
-        rownumColumn.setCellFactory(column -> new TableCell<ResultRow, String>() {
+        rownumColumn.setCellFactory(column -> new TableCell<ScopeRow, String>() {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
@@ -64,8 +65,8 @@ public class MetricsMatcher implements Initializable {
             }
         });
 
-        ObservableList<ResultRow> results = FXCollections.observableArrayList(
-                ResultRow.builder()
+        scopeOfWork.addAll(
+                ScopeRow.builder()
                         .metricsProfile("Dummy study fast check")
                         .query("Connection check")
                         .expectedValue("1")
@@ -73,7 +74,7 @@ public class MetricsMatcher implements Initializable {
                         .executionStatus("OK")
                         .executionTime(1.23)
                         .build(),
-                ResultRow.builder()
+                ScopeRow.builder()
                         .metricsProfile("Dummy study fast check")
                         .query("select-1-notitle")
                         .expectedValue("1")
@@ -81,7 +82,7 @@ public class MetricsMatcher implements Initializable {
                         .executionStatus("FAIL")
                         .executionTime(1.23)
                         .build(),
-                ResultRow.builder()
+                ScopeRow.builder()
                         .metricsProfile("Dummy study full check")
                         .query("select-1-notitle")
                         .expectedValue("1")
@@ -94,14 +95,14 @@ public class MetricsMatcher implements Initializable {
         PseudoClass failRowPseudoClass = PseudoClass.getPseudoClass("fail");
         PseudoClass errorRowPseudoClass = PseudoClass.getPseudoClass("error");
 
-        table.setRowFactory(tv -> new TableRow<ResultRow>() {
+        table.setRowFactory(tv -> new TableRow<ScopeRow>() {
             @Override
-            public void updateItem(ResultRow item, boolean empty) {
+            public void updateItem(ScopeRow item, boolean empty) {
                 super.updateItem(item, empty);
                 pseudoClassStateChanged(failRowPseudoClass, false);
                 pseudoClassStateChanged(errorRowPseudoClass, false);
 
-                if (!empty) {
+                if (!empty && item.getExecutionStatus() != null) {
                     switch (item.getExecutionStatus()) {
                         case "FAIL":
                             pseudoClassStateChanged(failRowPseudoClass, true);
@@ -114,10 +115,10 @@ public class MetricsMatcher implements Initializable {
             }
         });
 
-        table.setItems(results);
+        table.setItems(scopeOfWork);
     }
 
-    public DataSource selectedDataSource;
+    private DataSource selectedDataSource;
     private Set<MetricsProfile> selectedMetricsProfiles = new LinkedHashSet<>();
 
     private void reloadDataSources() {
@@ -153,23 +154,47 @@ public class MetricsMatcher implements Initializable {
         metricsProfilesMenu.getItems().clear();
         try {
             List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
-            metricsProfiles.forEach(mp -> {
-                CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
+
+            for (MetricsProfile metricsProfile : metricsProfiles) {
+                CheckMenuItem menuItem = new CheckMenuItem(metricsProfile.getName());
                 menuItem.setOnAction(e -> {
                     if (menuItem.isSelected()) {
-
+                        selectedMetricsProfiles.add(metricsProfile);
+                        recalculateScope();
                     }
                 });
                 metricsProfilesMenu.getItems().add(menuItem);
-            });
+            }
         } catch (AssetError e) {
             AssetErrorDialog.show("Can't read metrics profiles", e, "#metrics-profiles");
         }
     }
 
+    private void recalculateScope() {
+        scopeOfWork.clear();
+
+        for (MetricsProfile selectedMetricsProfile : selectedMetricsProfiles) {
+            for (Map.Entry<String, Object> metrics : selectedMetricsProfile.getMetrics().entrySet()) {
+                for (Query query : queries) {
+                    if (metrics.getKey().equals(query.getId())) {
+                        ScopeRow scopeRow = ScopeRow.builder()
+                                .metricsProfile(selectedMetricsProfile.getName())
+                                .query(Objects.toString(query.getTitle(), query.getId()))
+                                .expectedValue(metrics.getValue())
+                                .build();
+                        scopeOfWork.add(scopeRow);
+                    }
+                }
+
+            }
+        }
+    }
+
+    private List<Query> queries;
+
     private void loadQueries() {
         try {
-            List<Query> queries = AssetsLoader.loadQueries("queries");
+            queries = AssetsLoader.loadQueries("queries");
         } catch (AssetError e) {
             AssetErrorDialog.show("Can't read queries", e, "#queries");
         }

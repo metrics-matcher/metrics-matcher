@@ -5,11 +5,11 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ResultRow {
+public class ScopeRow {
     String metricsProfile;
     String query;
-    String expectedValue;
-    String actualValue;
+    Object expectedValue;
+    Object actualValue;
     String executionStatus;
     Double executionTime;
 }
