@@ -28,7 +28,7 @@ public class MetricsMatcher implements Initializable {
     public Menu dataSourceMenu;
     public MenuItem reloadMenuItem;
     public TableView<ResultRow> table;
-    public TableColumn rownumColumn;
+    public TableColumn<ResultRow, String> rownumColumn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,11 +52,27 @@ public class MetricsMatcher implements Initializable {
 
         ObservableList<ResultRow> results = FXCollections.observableArrayList(
                 ResultRow.builder()
-                        .metricsProfile("mp")
-                        .query("Query")
-                        .expectedValue("123")
-                        .actualValue("234")
+                        .metricsProfile("Dummy study fast check")
+                        .query("Connection check")
+                        .expectedValue("1")
+                        .actualValue("1")
                         .executionStatus("OK")
+                        .executionTime(1.23)
+                        .build(),
+                ResultRow.builder()
+                        .metricsProfile("Dummy study fast check")
+                        .query("select-1-notitle")
+                        .expectedValue("1")
+                        .actualValue("1")
+                        .executionStatus("FAILED")
+                        .executionTime(1.23)
+                        .build(),
+                ResultRow.builder()
+                        .metricsProfile("Dummy study full check")
+                        .query("select-1-notitle")
+                        .expectedValue("1")
+                        .actualValue("1")
+                        .executionStatus("ERROR")
                         .executionTime(1.23)
                         .build()
         );

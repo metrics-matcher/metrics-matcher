@@ -1,20 +1,15 @@
-TableView {
-    /*-fx-background-insets: 0;*/
-    /*-fx-padding: 0;*/
-}
-
 TableView .table-cell {
-    -fx-border-width: 0 1 0 0;
+    -fx-border-width: 0 1 1 0;
     -fx-background-insets: 0;
     -fx-border-insets: 0;
-    -fx-border-color: #ccc;
+    -fx-border-color: #CCC;
 }
 
 TableView .table-cell.-mm-rownum,
 TableView .table-row-cell:selected .table-cell:filled.-mm-rownum {
     -fx-background-color: -fx-body-color-to-right;
-    -fx-border-color: darkgray;
-    -fx-text-fill: #333333;
+    -fx-border-color: #CCC;
+    -fx-text-fill: #333;
 }
 
 TableView.table-row-cell:filled:selected,
