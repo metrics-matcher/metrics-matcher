@@ -104,11 +104,15 @@ public class MetricsMatcher implements Initializable {
         table.setItems(results);
     }
 
+    private DataSource selectedDataSource;
+    private MetricsProfile selectedMetricsProfile;
+
     private void reloadDataSources() {
         try {
             List<DataSource> dataSources = AssetsLoader.loadDataSources("configs/data-sources.json");
             dataSources.forEach(ds -> {
                 RadioMenuItem menuItem = new RadioMenuItem(ds.getName());
+                menuItem.setOnAction(e -> selectedDataSource = ds);
                 dataSourceMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
@@ -122,6 +126,7 @@ public class MetricsMatcher implements Initializable {
             List<MetricsProfile> metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
             metricsProfiles.forEach(mp -> {
                 CheckMenuItem menuItem = new CheckMenuItem(mp.getName());
+                menuItem.setOnAction(e -> selectedMetricsProfile = mp);
                 metricsProfilesMenu.getItems().add(menuItem);
             });
         } catch (AssetError e) {
@@ -148,7 +153,7 @@ public class MetricsMatcher implements Initializable {
     public void runAction(ActionEvent e) {
         log.debug("Run");
         try (Jdbc jdbc = new Jdbc()) {
-            Object result = jdbc.execute(DataSource.of("Test", "jdbc:h2:mem:test", 300, "xxx", "yyy"), "SELECT 1 FROM DUAL");
+            Object result = jdbc.execute(selectedDataSource, "SELECT 1 FROM DUAL");
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
