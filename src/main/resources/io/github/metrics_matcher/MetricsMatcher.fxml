@@ -62,7 +62,7 @@
                 </TableColumn>
                 <TableColumn text="Query">
                     <cellValueFactory>
-                        <PropertyValueFactory property="query"/>
+                        <PropertyValueFactory property="query.title"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Expected value">

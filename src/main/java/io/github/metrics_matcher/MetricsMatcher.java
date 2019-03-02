@@ -68,7 +68,7 @@ public class MetricsMatcher implements Initializable {
         scopeOfWork.addAll(
                 ScopeRow.builder()
                         .metricsProfile("Dummy study fast check")
-                        .query("Connection check")
+//                        .query("Connection check")
                         .expectedValue("1")
                         .actualValue("1")
                         .executionStatus("OK")
@@ -76,7 +76,7 @@ public class MetricsMatcher implements Initializable {
                         .build(),
                 ScopeRow.builder()
                         .metricsProfile("Dummy study fast check")
-                        .query("select-1-notitle")
+//                        .query("select-1-notitle")
                         .expectedValue("1")
                         .actualValue("1")
                         .executionStatus("FAIL")
@@ -84,7 +84,7 @@ public class MetricsMatcher implements Initializable {
                         .build(),
                 ScopeRow.builder()
                         .metricsProfile("Dummy study full check")
-                        .query("select-1-notitle")
+//                        .query("select-1-notitle")
                         .expectedValue("1")
                         .actualValue("Oralce error: #123")
                         .executionStatus("ERROR")
@@ -179,7 +179,7 @@ public class MetricsMatcher implements Initializable {
                     if (metrics.getKey().equals(query.getId())) {
                         ScopeRow scopeRow = ScopeRow.builder()
                                 .metricsProfile(selectedMetricsProfile.getName())
-                                .query(Objects.toString(query.getTitle(), query.getId()))
+                                .query(query)
                                 .expectedValue(metrics.getValue())
                                 .build();
                         scopeOfWork.add(scopeRow);
@@ -212,7 +212,11 @@ public class MetricsMatcher implements Initializable {
         //todo
         runLockMenuItems(true);
         try (Jdbc jdbc = new Jdbc()) {
-            Object result = jdbc.execute(selectedDataSource, "SELECT 1 FROM DUAL");
+            for (ScopeRow scopeRow : scopeOfWork) {
+                Object result = jdbc.execute(selectedDataSource, scopeRow.getQuery().getSql());
+                log.debug("" + result);
+            }
+
         } catch (SQLException e1) {
             e1.printStackTrace();
         }

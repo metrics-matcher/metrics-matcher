@@ -1,5 +1,6 @@
 package io.github.metrics_matcher.table;
 
+import io.github.metrics_matcher.assets.Query;
 import lombok.Builder;
 import lombok.Value;
 
@@ -7,7 +8,7 @@ import lombok.Value;
 @Builder
 public class ScopeRow {
     String metricsProfile;
-    String query;
+    Query query;
     Object expectedValue;
     Object actualValue;
     String executionStatus;
