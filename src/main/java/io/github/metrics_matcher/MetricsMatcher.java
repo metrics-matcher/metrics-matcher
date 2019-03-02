@@ -6,10 +6,7 @@ import io.github.metrics_matcher.dialogs.NotImplementedDialog;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -27,10 +24,14 @@ public class MetricsMatcher implements Initializable {
     public MenuItem saveReportMenuItem;
     public Menu dataSourceMenu;
     public MenuItem reloadMenuItem;
+    public TableView table;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         synchronizeAction();
+    }
+
+    private void createTable() {
     }
 
     private void reloadDataSources() {
