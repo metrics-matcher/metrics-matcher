@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.BorderPane?>
-
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.collections.FXCollections?>
-<?import io.github.metrics_matcher.table.ScopeRow?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.Region?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
     <top>
         <MenuBar>
             <Menu text="File">
                 <MenuItem fx:id="synchronizeMenuItem" text="Synchronize" onAction="#synchronizeAction"/>
-                <SeparatorMenuItem/>
-                <MenuItem fx:id="saveReportMenuItem" text="Save report" onAction="#showNotImplemented"/>
                 <SeparatorMenuItem/>
                 <MenuItem text="Exit" onAction="#exitAction"/>
             </Menu>
@@ -50,39 +35,39 @@
             </Menu>
         </MenuBar>
     </top>
-
     <center>
+
         <TableView fx:id="table">
             <columns>
-                <TableColumn fx:id="rownumColumn" text="#" prefWidth="30"/>
-                <TableColumn text="Metrics profile">
+                <TableColumn fx:id="rownumColumn" text="#" prefWidth="30" sortable="false"/>
+                <TableColumn text="Metrics profile" sortable="false">
                     <cellValueFactory>
                         <PropertyValueFactory property="metricsProfile"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Query">
+                <TableColumn text="Query" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="query.title"/>
+                        <PropertyValueFactory property="queryTitle"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Expected value">
+                <TableColumn text="Expected value" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="expectedValue"/>
+                        <PropertyValueFactory property="expected"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Actual value">
+                <TableColumn text="Actual value" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="actualValue"/>
+                        <PropertyValueFactory property="result"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Execution status">
+                <TableColumn fx:id="executionStatus" text="Execution status" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="executionStatus"/>
+                        <PropertyValueFactory property="status"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Execution time">
+                <TableColumn text="Execution time" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="executionTime"/>
+                        <PropertyValueFactory property="duration"/>
                     </cellValueFactory>
                 </TableColumn>
             </columns>
@@ -103,7 +88,19 @@
             </Label>
 
             <Separator orientation="VERTICAL"/>
-            <Button text="Run" onAction="#runAction"/>
+            <Label text="Metrics profiles:"/>
+            <Label fx:id="selectedMetricsProfilesLabel" minWidth="15">
+                <tooltip>
+                    <Tooltip fx:id="selectedMetricsProfilesTooltip"/>
+                </tooltip>
+            </Label>
+
+
+            <Separator orientation="VERTICAL"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <ProgressBar fx:id="progressBar" progress="0" prefWidth="100"/>
         </HBox>
 
     </bottom>

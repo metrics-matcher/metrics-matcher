@@ -1,4 +1,4 @@
-package io.github.metrics_matcher.assets;
+package io.github.metrics_matcher.core;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -37,37 +37,37 @@ public final class AssetsLoader {
         }
     }
 
-    public static List<DataSource> loadDataSources(String filepath) throws AssetError {
+    public static List<DataSource> loadDataSources(String filepath) throws MetricsException {
         log.info("Loading data sources from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             DataSource[] dataSources = GSON.fromJson(reader, DataSource[].class);
             log.info("Loaded {} data sources", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
-            throw new AssetError(format(CAN_NOT_READ, filepath), e);
+            throw new MetricsException(format(CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format(CAN_NOT_PARSE, filepath), e);
+            throw new MetricsException(format(CAN_NOT_PARSE, filepath), e);
         }
     }
 
-    public static List<MetricsProfile> loadMetricsProfiles(String filepath) throws AssetError {
+    public static List<MetricsProfile> loadMetricsProfiles(String filepath) throws MetricsException {
         log.info("Loading metrics profiles from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
             MetricsProfile[] dataSources = GSON.fromJson(reader, MetricsProfile[].class);
             log.info("Loaded {} metrics profiles", dataSources.length);
             return Arrays.asList(dataSources);
         } catch (IOException e) {
-            throw new AssetError(format(CAN_NOT_READ, filepath), e);
+            throw new MetricsException(format(CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new AssetError(format(CAN_NOT_PARSE, filepath), e);
+            throw new MetricsException(format(CAN_NOT_PARSE, filepath), e);
         }
     }
 
-    public static List<Query> loadQueries(String directory) throws AssetError {
+    public static List<Query> loadQueries(String directory) throws MetricsException {
         log.info("Loading queries from [{}]", directory);
         List<File> files = listFiles(directory, ".sql");
         if (files.isEmpty()) {
-            throw new AssetError(format(FILES_NOT_FOUND, directory));
+            throw new MetricsException(format(FILES_NOT_FOUND, directory));
         }
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
@@ -86,18 +86,18 @@ public final class AssetsLoader {
                 }
                 queries.add(Query.of(id, title, String.join("\n", lines)));
             } catch (IOException e) {
-                throw new AssetError(format(CAN_NOT_READ, filename), e);
+                throw new MetricsException(format(CAN_NOT_READ, filename), e);
             }
         }
         log.info("Loaded {} queries", queries.size());
         return queries;
     }
 
-    public static void loadDrivers(String directory) throws AssetError {
+    public static void loadDrivers(String directory) throws MetricsException {
         log.info("Loading drivers from [{}]", directory);
         List<File> files = listFiles(directory, ".jar");
         if (files.isEmpty()) {
-            throw new AssetError(format(FILES_NOT_FOUND, directory));
+            throw new MetricsException(format(FILES_NOT_FOUND, directory));
         }
         try {
             URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -110,11 +110,11 @@ public final class AssetsLoader {
                 try {
                     method.invoke(classLoader, file.toURI().toURL());
                 } catch (Exception e) {
-                    throw new AssetError(format("Can't load driver \"%s\"", filename), e);
+                    throw new MetricsException(format("Can't load driver \"%s\"", filename), e);
                 }
             }
         } catch (Exception e) {
-            throw new AssetError(format("Can't load drivers from \"%s\"", directory), e);
+            throw new MetricsException(format("Can't load drivers from \"%s\"", directory), e);
         }
         log.info("Loaded {} drivers", files.size());
     }

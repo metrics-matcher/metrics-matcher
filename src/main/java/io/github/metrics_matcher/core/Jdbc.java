@@ -1,6 +1,5 @@
-package io.github.metrics_matcher;
+package io.github.metrics_matcher.core;
 
-import io.github.metrics_matcher.assets.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
@@ -19,12 +18,8 @@ public class Jdbc implements AutoCloseable {
         }
     }
 
-    public Object execute(DataSource dataSource, String sql) {
-        try {
-            connect(dataSource);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public Object execute(DataSource dataSource, String sql) throws SQLException {
+        connect(dataSource);
 
         try (
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -37,11 +32,9 @@ public class Jdbc implements AutoCloseable {
                 return tmp;
             } else {
                 log.warn("Empty result");
+                return null;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
     @Override

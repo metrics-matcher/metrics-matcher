@@ -1,13 +1,13 @@
 [
   {
-    "name": "DEV DB (H2)",
+    "name": "DEV DB (H2 database)",
     "url": "jdbc:h2:mem:dev",
     "username": "user",
     "password": "pass"
   },
   {
     "name": "TEST DB (Oracle, broken)",
-    "url": "jdbc:oracle:thin:@//myhost:1521/orcl",
+    "url": "jdbc:oracle:thin:@//somehost:1521/orcl",
     "username": "user",
     "password": "pass"
   }

@@ -7,5 +7,5 @@ mvn clean package
 
 ## Compile
 ```
-mvn clean compile -P!Checkstyle
+mvn clean compile
 ```

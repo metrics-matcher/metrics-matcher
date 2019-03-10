@@ -26,7 +26,7 @@
             <source>src/misc/metrics-matcher.cmd</source>
         </file>
         <file>
-            <source>src/main/resources/io/github/metrics_matcher/icon.png</source>
+            <source>src/main/resources/io/github/metrics_matcher/images/icon.png</source>
         </file>
         <file>
             <source>LICENSE</source>

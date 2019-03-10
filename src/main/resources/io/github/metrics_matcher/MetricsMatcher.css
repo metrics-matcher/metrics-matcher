@@ -1,48 +1,45 @@
 TableView {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
+    /*-fx-focus-color: transparent;*/
+    /*-fx-faint-focus-color: transparent;*/
 }
 
-
-/*TableView .table-cell {*/
-    /*-fx-border-width: 0 1 1 0;*/
-    /*-fx-background-insets: 0;*/
-    /*-fx-border-insets: 0;*/
-    /*-fx-border-color: #CCC;*/
-/*}*/
-
-/*TableView .table-cell.-mm-rownum,*/
-/*TableView .table-row-cell:selected .table-cell:filled.-mm-rownum {*/
-    /*-fx-background-color: -fx-body-color-to-right;*/
-    /*-fx-border-color: #CCC;*/
-    /*-fx-text-fill: #333;*/
-/*}*/
-
-/*
-TableView.table-row-cell:filled:selected,
-TableView:focused .table-row-cell:filled:selected {
-    -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
-    -fx-table-cell-border-color: #00F;
+TableView:focused .table-row-cell:focused {
+    -fx-background-color: -fx-table-cell-border-color, -fx-background;
 }
 
+TableView .table-cell:rownum,
+TableView .table-row-cell:selected .table-cell:filled:rownum {
+    -fx-background-color: -fx-body-color-to-right;
+    -fx-text-fill: #333;
+    -fx-border-color: #CCC;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 0 5;
+}
 
-TableView .table-row-cell:selected .table-cell:filled,
-TableView:focused .table-row-cell:selected .table-cell:filled {
+TableView .table-row-cell:selected .table-cell:filled:rownum {
+    -fx-font-weight: bold;
+}
+
+TableView .table-row-cell:selected {
+    -fx-background-color: #06F;
     -fx-background-insets: 0;
-    -fx-border-insets: 0;
-    -fx-text-fill: #fff;
-    -fx-border-color: #fff;
-    -fx-background-color: linear-gradient(to bottom, #337fca, #0060c0);
-}
-*/
-
-.table-row-cell:selected {
-    -fx-border-color: blue;
 }
 
-TableView .table-row-cell:fail .table-cell {
-    -fx-background-color: pink;
+TableView .table-row-cell:selected .table-cell {
+    -fx-border-color: #CCC;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: -1 0 0 3;
+    -fx-background-insets: 1;
 }
-TableView .table-row-cell:error .table-cell {
-    -fx-background-color: red;
+
+TableView .table-cell:fail {
+    -fx-background-color: #FC3;
+    -fx-text-fill: #000;
+    -fx-background-insets: 0 0 1 0;
+}
+
+TableView .table-cell:error {
+    -fx-background-color: #F33;
+    -fx-text-fill: #FFF;
+    -fx-background-insets: 0 0 1 0;
 }

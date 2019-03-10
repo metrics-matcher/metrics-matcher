@@ -1,12 +1,23 @@
 [
   {
-    "name": "All queries",
+    "name": "Valid queries",
     "metrics": {
       "select-date": "2019-02-28",
       "select-float": 123.456,
       "select-integer": 123,
       "select-notitle": 1,
       "select-string": "Abc123"
+    }
+  },
+  {
+    "name": "Broken queries",
+    "metrics": {
+      "select-date": "2019-02-21",
+      "select-float": 456.789,
+      "select-integer": 321,
+      "select-notitle": 1,
+      "select-string": "Abc321",
+      "select-broken": "Abc321"
     }
   },
   {

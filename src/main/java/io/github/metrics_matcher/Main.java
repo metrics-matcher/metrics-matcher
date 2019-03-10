@@ -9,9 +9,8 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.logging.LogManager;
 
-public class App extends Application {
+public class Main extends Application {
     private static final double APP_WIDTH = 960;
     private static final double APP_HEIGHT = 540;
 
@@ -23,12 +22,10 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MetricsMatcher.fxml"));
 
-        MetricsMatcher controller = loader.getController();
         Parent root = loader.load();
 
         stage.setScene(new Scene(root, APP_WIDTH, APP_HEIGHT));
-
-        stage.getIcons().addAll(new Image(getClass().getResourceAsStream("icon.png")));
+        stage.getIcons().addAll(new Image(getClass().getResourceAsStream("images/icon.png")));
 
         final String version = getClass().getPackage().getImplementationVersion();
 
