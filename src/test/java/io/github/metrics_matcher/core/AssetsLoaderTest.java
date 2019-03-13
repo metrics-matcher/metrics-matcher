@@ -67,9 +67,8 @@ public class AssetsLoaderTest {
         });
     }
 
-
     @Test
-    void loadQueries() throws MetricsException {
+    void loadQueries_Correct() throws MetricsException {
         List<Query> queries = AssetsLoader.loadQueries("src/test/resources/sqls");
         assertEquals(2, queries.size());
         assertEquals("select-1", queries.get(0).getId());
@@ -79,5 +78,25 @@ public class AssetsLoaderTest {
         assertEquals("select-1-notitle", queries.get(1).getId());
         assertNull(queries.get(1).getTitle());
         assertEquals("SELECT 1 FROM DUAL", queries.get(1).getSql());
+    }
+
+    @Test
+    public void loadQueries_EmptyDirectory() {
+        assertThrows(MetricsException.class, () -> {
+            AssetsLoader.loadQueries("src/test/resources/empty");
+        });
+    }
+
+    @Test
+    void loadDrivers_Correct() throws MetricsException, ClassNotFoundException {
+        AssetsLoader.loadDrivers("src/test/resources/jars");
+        Class.forName("io.github.xantorohara.dummy.HelloWorld");
+    }
+
+    @Test
+    public void loadDrivers_EmptyDirectory() {
+        assertThrows(MetricsException.class, () -> {
+            AssetsLoader.loadDrivers("src/test/resources/empty");
+        });
     }
 }

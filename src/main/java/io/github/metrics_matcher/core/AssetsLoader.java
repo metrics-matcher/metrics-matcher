@@ -91,7 +91,7 @@ public final class AssetsLoader {
                 throw new MetricsException(format(MSG_CAN_NOT_READ, filename), e);
             }
         }
-        log.info("Loaded {} queries", queries.size());
+        log.info("Loaded [{}] queries", queries.size());
         return queries;
     }
 
@@ -118,6 +118,6 @@ public final class AssetsLoader {
         } catch (Exception e) {
             throw new MetricsException(format("Can't load drivers from \"%s\"", directory), e);
         }
-        log.info("Loaded {} drivers", files.size());
+        log.info("Loaded [{}] drivers", files.size());
     }
 }
