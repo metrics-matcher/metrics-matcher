@@ -125,7 +125,7 @@ public class MetricsMatcher implements Initializable {
         try {
             dataSources = AssetsLoader.loadDataSources("configs/data-sources.json");
         } catch (MetricsException e) {
-            ErrorDialog.show("Can't read data sources", e, "#data-sources");
+            ErrorDialog.showError("Can't read data sources", e, HelpRefs.DATA_SOURCES);
             return;
         }
 
@@ -168,7 +168,7 @@ public class MetricsMatcher implements Initializable {
         try {
             metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
         } catch (MetricsException e) {
-            ErrorDialog.show("Can't read metrics profiles", e, "#metrics-profiles");
+            ErrorDialog.showError("Can't read metrics profiles", e, HelpRefs.METRICS_PROFILES);
             return;
         }
 
@@ -219,7 +219,7 @@ public class MetricsMatcher implements Initializable {
         try {
             queries = AssetsLoader.loadQueries("queries");
         } catch (MetricsException e) {
-            ErrorDialog.show("Can't read queries", e, "#queries");
+            ErrorDialog.showError("Can't read queries", e, HelpRefs.QUERIES);
         }
     }
 
@@ -227,7 +227,7 @@ public class MetricsMatcher implements Initializable {
         try {
             AssetsLoader.loadDrivers("drivers");
         } catch (MetricsException e) {
-            ErrorDialog.show("Can't load drivers", e, "#drivers");
+            ErrorDialog.showError("Can't load drivers", e, HelpRefs.DRIVERS);
         }
     }
 
@@ -247,7 +247,7 @@ public class MetricsMatcher implements Initializable {
                     progressBar.setProgress(progressBar.getProgress() + step);
                 }));
             } catch (MetricsException e) {
-                ErrorDialog.show("Can't run tasks", e);
+                ErrorDialog.showError("Can't run tasks", e);
             }
             Platform.runLater(() -> {
                 progressBar.setVisible(false);
