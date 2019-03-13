@@ -1,8 +1,10 @@
-package io.github.metrics_matcher.core;
+package io.github.metrics_matcher.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
-@Value(staticConstructor = "of")
+@Value
+@EqualsAndHashCode(of = "id")
 public class Query {
     private String id;
     private String title;

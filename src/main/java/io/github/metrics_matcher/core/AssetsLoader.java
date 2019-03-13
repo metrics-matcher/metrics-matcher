@@ -1,7 +1,9 @@
 package io.github.metrics_matcher.core;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
+import io.github.metrics_matcher.dto.DataSource;
+import io.github.metrics_matcher.dto.MetricsProfile;
+import io.github.metrics_matcher.dto.Query;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,11 +24,11 @@ import static java.lang.String.format;
 @Slf4j
 @UtilityClass
 public final class AssetsLoader {
-    private static final String CAN_NOT_READ = "Can't read file \"%s\"";
-    private static final String CAN_NOT_PARSE = "Can't parse file \"%s\"";
-    private static final String FILES_NOT_FOUND = "Files not found in \"%s\"";
+    private static final String MSG_CAN_NOT_READ = "Can't read file \"%s\"";
+    private static final String MSG_CAN_NOT_PARSE = "Can't parse file \"%s\"";
+    private static final String MSG_FILES_NOT_FOUND = "Files not found in \"%s\"";
 
-    private static Gson GSON = new Gson();
+    private static final Gson GSON = new Gson();
 
     private static List<File> listFiles(String directory, String extension) {
         File[] files = new File(directory).listFiles(file -> file.isFile() && file.getName().endsWith(extension));
@@ -40,26 +42,26 @@ public final class AssetsLoader {
     public static List<DataSource> loadDataSources(String filepath) throws MetricsException {
         log.info("Loading data sources from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
-            DataSource[] dataSources = GSON.fromJson(reader, DataSource[].class);
-            log.info("Loaded {} data sources", dataSources.length);
-            return Arrays.asList(dataSources);
+            DataSource[] data = GSON.fromJson(reader, DataSource[].class);
+            log.info("Loaded [{}] data sources", data.length);
+            return Arrays.asList(data);
         } catch (IOException e) {
-            throw new MetricsException(format(CAN_NOT_READ, filepath), e);
+            throw new MetricsException(format(MSG_CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new MetricsException(format(CAN_NOT_PARSE, filepath), e);
+            throw new MetricsException(format(MSG_CAN_NOT_PARSE, filepath), e);
         }
     }
 
     public static List<MetricsProfile> loadMetricsProfiles(String filepath) throws MetricsException {
         log.info("Loading metrics profiles from [{}]", filepath);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filepath))) {
-            MetricsProfile[] dataSources = GSON.fromJson(reader, MetricsProfile[].class);
-            log.info("Loaded {} metrics profiles", dataSources.length);
-            return Arrays.asList(dataSources);
+            MetricsProfile[] data = GSON.fromJson(reader, MetricsProfile[].class);
+            log.info("Loaded [{}] metrics profiles", data.length);
+            return Arrays.asList(data);
         } catch (IOException e) {
-            throw new MetricsException(format(CAN_NOT_READ, filepath), e);
+            throw new MetricsException(format(MSG_CAN_NOT_READ, filepath), e);
         } catch (JsonParseException e) {
-            throw new MetricsException(format(CAN_NOT_PARSE, filepath), e);
+            throw new MetricsException(format(MSG_CAN_NOT_PARSE, filepath), e);
         }
     }
 
@@ -67,7 +69,7 @@ public final class AssetsLoader {
         log.info("Loading queries from [{}]", directory);
         List<File> files = listFiles(directory, ".sql");
         if (files.isEmpty()) {
-            throw new MetricsException(format(FILES_NOT_FOUND, directory));
+            throw new MetricsException(format(MSG_FILES_NOT_FOUND, directory));
         }
         final List<Query> queries = new ArrayList<>(files.size());
         for (File file : files) {
@@ -84,9 +86,9 @@ public final class AssetsLoader {
                         lines.remove(0);
                     }
                 }
-                queries.add(Query.of(id, title, String.join("\n", lines)));
+                queries.add(new Query(id, title, String.join("\n", lines)));
             } catch (IOException e) {
-                throw new MetricsException(format(CAN_NOT_READ, filename), e);
+                throw new MetricsException(format(MSG_CAN_NOT_READ, filename), e);
             }
         }
         log.info("Loaded {} queries", queries.size());
@@ -97,7 +99,7 @@ public final class AssetsLoader {
         log.info("Loading drivers from [{}]", directory);
         List<File> files = listFiles(directory, ".jar");
         if (files.isEmpty()) {
-            throw new MetricsException(format(FILES_NOT_FOUND, directory));
+            throw new MetricsException(format(MSG_FILES_NOT_FOUND, directory));
         }
         try {
             URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();

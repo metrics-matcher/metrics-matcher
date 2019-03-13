@@ -1,0 +1,2 @@
+-- Select date with time
+SELECT TO_DATE('2019-02-28 15:25:59', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL

@@ -1,11 +1,16 @@
 package io.github.metrics_matcher.core;
 
+import io.github.metrics_matcher.dto.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 
 @Slf4j
 public class Jdbc implements AutoCloseable {
+
+    public enum SpecialResult {
+        EMPTY
+    }
 
     private Connection connection;
 
@@ -32,7 +37,7 @@ public class Jdbc implements AutoCloseable {
                 return tmp;
             } else {
                 log.warn("Empty result");
-                return null;
+                return SpecialResult.EMPTY;
             }
         }
     }

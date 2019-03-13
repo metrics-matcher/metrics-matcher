@@ -32,14 +32,71 @@ TableView .table-row-cell:selected .table-cell {
     -fx-background-insets: 1;
 }
 
-TableView .table-cell:fail {
-    -fx-background-color: #FC3;
-    -fx-text-fill: #000;
+/*Colorings*/
+TableView .table-cell:ok {
+    -fx-background-color: #4AD64A;
     -fx-background-insets: 0 0 1 0;
 }
 
+TableView .table-row-cell:odd .table-cell:ok {
+    -fx-background-color: #74E374;
+}
+
+TableView .table-cell:mismatch {
+    -fx-background-color: #FFE258;
+    -fx-background-insets: 0 0 1 0;
+}
+
+TableView .table-row-cell:even .table-cell:mismatch {
+    -fx-background-color: #FFEA82;
+}
+
 TableView .table-cell:error {
-    -fx-background-color: #F33;
+    -fx-background-color: #FF5858;
     -fx-text-fill: #FFF;
     -fx-background-insets: 0 0 1 0;
+}
+
+TableView .table-row-cell:even .table-cell:error {
+    -fx-background-color: #FF8282;
+}
+
+TableView .table-cell:skip {
+    -fx-background-color: #6B50BF;
+    -fx-text-fill: #FFF;
+    -fx-background-insets: 0 0 1 0;
+}
+
+TableView .table-row-cell:even .table-cell:skip {
+    -fx-background-color: #8E78D4;
+}
+
+Label.counter {
+    -fx-padding: 0 5;
+    -fx-border-color: #FFF;
+}
+
+Label.ok {
+    -fx-background-color: #29CC29;
+    -fx-text-fill: #000;
+}
+
+Label.mismatch {
+    -fx-background-color: #FFDC33;
+    -fx-text-fill: #000;
+}
+
+Label.error {
+    -fx-background-color: #FF3333;
+    -fx-text-fill: #FFF;
+}
+
+Label.skip {
+    -fx-background-color: #5133AF;
+    -fx-text-fill: #FFF;
+}
+
+Label.empty {
+    -fx-background-color: #CCC;
+    -fx-text-fill: #000;
 }

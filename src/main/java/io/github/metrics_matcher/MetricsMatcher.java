@@ -1,29 +1,30 @@
 package io.github.metrics_matcher;
 
-import io.github.metrics_matcher.core.DataSource;
-import io.github.metrics_matcher.core.MetricsException;
-import io.github.metrics_matcher.core.MetricsProfile;
-import io.github.metrics_matcher.core.Query;
 import io.github.metrics_matcher.core.AssetsLoader;
+import io.github.metrics_matcher.core.Matcher;
+import io.github.metrics_matcher.core.MetricsException;
+import io.github.metrics_matcher.core.Task;
 import io.github.metrics_matcher.dialogs.ErrorDialog;
 import io.github.metrics_matcher.dialogs.NotImplementedDialog;
-import io.github.metrics_matcher.core.Engine;
-import io.github.metrics_matcher.core.Task;
+import io.github.metrics_matcher.dto.DataSource;
+import io.github.metrics_matcher.dto.MetricsProfile;
+import io.github.metrics_matcher.dto.Query;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.css.PseudoClass;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class MetricsMatcher implements Initializable {
-
     public Menu dataSourceMenu;
     public Menu metricsProfilesMenu;
     public Menu runMenu;
@@ -40,39 +41,36 @@ public class MetricsMatcher implements Initializable {
     public Tooltip selectedDataSourceTooltip;
     public Label selectedMetricsProfilesLabel;
     public Tooltip selectedMetricsProfilesTooltip;
+    public Label selectedMetricsLabel;
 
     private final ToggleGroup dataSourceToggleGroup = new ToggleGroup();
 
-    private final StringProperty selectedDataSourceText = new SimpleStringProperty();
-    private final StringProperty selectedDataSourceTooltipText = new SimpleStringProperty();
-    private final StringProperty selectedMetricsProfilesText = new SimpleStringProperty();
-    private final StringProperty selectedMetricsProfilesTooltipText = new SimpleStringProperty();
-
     public ProgressBar progressBar;
+    public HBox resultCounters;
+    public Label counterOkLabel;
+    public Label counterErrorLabel;
+    public Label counterMismatchLabel;
+    public Label counterSkipLabel;
+
 
     private List<Query> queries;
 
-    private final Engine engine = new Engine();
+    private final Matcher matcher = new Matcher();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initBindings();
         synchronizeAction();
         createTable();
-        engine.getTasks().addAll(TempData.DATA);
+//        matcher.getTasks().addAll(TempData.DATA);
     }
 
-    private void initBindings() {
-        selectedDataSourceLabel.textProperty().bind(selectedDataSourceText);
-        selectedDataSourceTooltip.textProperty().bind(selectedDataSourceTooltipText);
-        selectedMetricsProfilesLabel.textProperty().bind(selectedMetricsProfilesText);
-        selectedMetricsProfilesTooltip.textProperty().bind(selectedMetricsProfilesTooltipText);
-    }
 
     private void createTable() {
         PseudoClass rownumPseudoClass = PseudoClass.getPseudoClass("rownum");
-        PseudoClass failRowPseudoClass = PseudoClass.getPseudoClass("fail");
+        PseudoClass mismatchRowPseudoClass = PseudoClass.getPseudoClass("mismatch");
         PseudoClass errorRowPseudoClass = PseudoClass.getPseudoClass("error");
+        PseudoClass skipRowPseudoClass = PseudoClass.getPseudoClass("skip");
+        PseudoClass okRowPseudoClass = PseudoClass.getPseudoClass("ok");
 
         rownumColumn.setCellFactory(column -> new TableCell<Task, String>() {
             protected void updateItem(String item, boolean empty) {
@@ -85,8 +83,10 @@ public class MetricsMatcher implements Initializable {
         executionStatus.setCellFactory(column -> new TableCell<Task, Task.Status>() {
             protected void updateItem(Task.Status item, boolean empty) {
                 super.updateItem(item, empty);
-                pseudoClassStateChanged(failRowPseudoClass, false);
+                pseudoClassStateChanged(mismatchRowPseudoClass, false);
                 pseudoClassStateChanged(errorRowPseudoClass, false);
+                pseudoClassStateChanged(okRowPseudoClass, false);
+                pseudoClassStateChanged(skipRowPseudoClass, false);
 
                 if (item == null || empty) {
                     setText(null);
@@ -97,21 +97,29 @@ public class MetricsMatcher implements Initializable {
                 setText(item.name());
 
                 switch (item) {
+                    case OK:
+                        pseudoClassStateChanged(okRowPseudoClass, true);
+                        break;
                     case MISMATCH:
-                        pseudoClassStateChanged(failRowPseudoClass, true);
+                        pseudoClassStateChanged(mismatchRowPseudoClass, true);
                         break;
                     case ERROR:
                         pseudoClassStateChanged(errorRowPseudoClass, true);
                         break;
+                    case SKIP:
+                        pseudoClassStateChanged(skipRowPseudoClass, true);
+                        break;
                 }
             }
         });
-        table.setItems(engine.getTasks());
+        table.setItems(matcher.getTasks());
     }
 
     private void reloadDataSources() {
         dataSourceMenu.getItems().clear();
         runMenuItem.setDisable(true);
+        selectedDataSourceLabel.setText("None");
+        selectedDataSourceTooltip.setText("");
 
         List<DataSource> dataSources;
         try {
@@ -121,19 +129,21 @@ public class MetricsMatcher implements Initializable {
             return;
         }
 
-        DataSource previousSelection = engine.getDataSource();
-        engine.setDataSource(null);
+        DataSource previousSelection = matcher.getDataSource();
+        matcher.setDataSource(null);
         for (DataSource dataSource : dataSources) {
             RadioMenuItem menuItem = new RadioMenuItem(dataSource.getName());
             menuItem.setToggleGroup(dataSourceToggleGroup);
             menuItem.setOnAction(e -> {
-                engine.setDataSource(dataSource);
-                selectedDataSourceText.setValue(dataSource.getName());
-                selectedDataSourceTooltipText.setValue(dataSource.getUrl());
+                matcher.setDataSource(dataSource);
+                selectedDataSourceLabel.setText(dataSource.getName());
+                selectedDataSourceTooltip.setText(dataSource.getUrl());
                 touchRunState();
             });
             if (dataSource.equals(previousSelection)) {
-                engine.setDataSource(dataSource);
+                matcher.setDataSource(dataSource);
+                selectedDataSourceLabel.setText(dataSource.getName());
+                selectedDataSourceTooltip.setText(dataSource.getUrl());
                 menuItem.setSelected(true);
             }
             dataSourceMenu.getItems().add(menuItem);
@@ -141,14 +151,11 @@ public class MetricsMatcher implements Initializable {
 
         touchRunState();
 
-        if (engine.getDataSource() == null) {
+        if (matcher.getDataSource() == null) {
             if (previousSelection == null && !dataSourceMenu.getItems().isEmpty()) {
                 RadioMenuItem firstMenuItem = (RadioMenuItem) dataSourceMenu.getItems().get(0);
                 firstMenuItem.setSelected(true);
                 firstMenuItem.getOnAction().handle(null);
-            } else {
-                selectedDataSourceText.setValue("None");
-                selectedDataSourceTooltipText.setValue(null);
             }
         }
     }
@@ -165,26 +172,30 @@ public class MetricsMatcher implements Initializable {
             return;
         }
 
-        List<MetricsProfile> previousSelection = new ArrayList<>(engine.getMetricsProfiles());
-        engine.getMetricsProfiles().clear();
+        List<MetricsProfile> previousSelection = new ArrayList<>(matcher.getMetricsProfiles());
+        matcher.getMetricsProfiles().clear();
         for (MetricsProfile metricsProfile : metricsProfiles) {
             CheckMenuItem menuItem = new CheckMenuItem(metricsProfile.getName());
             menuItem.setOnAction(e -> {
                 if (menuItem.isSelected()) {
-                    engine.getMetricsProfiles().add(metricsProfile);
+                    matcher.getMetricsProfiles().add(metricsProfile);
                 } else {
-                    engine.getMetricsProfiles().remove(metricsProfile);
+                    matcher.getMetricsProfiles().remove(metricsProfile);
                 }
-                selectedMetricsProfilesText.setValue("" + engine.getMetricsProfiles().size());
-                selectedMetricsProfilesTooltipText.setValue(
-                        engine.getMetricsProfiles().stream().map(MetricsProfile::getName).collect(Collectors.joining(", "))
+                selectedMetricsProfilesLabel.setText("" + matcher.getMetricsProfiles().size());
+                selectedMetricsProfilesTooltip.setText(
+                        matcher.getMetricsProfiles().stream().map(MetricsProfile::getName).collect(Collectors.joining(", "))
+                );
+
+                selectedMetricsLabel.setText(
+                        "" + matcher.getMetricsProfiles().stream().mapToInt(mp -> mp.getMetrics().size()).sum()
                 );
 
                 touchRunState();
-                engine.update(queries);
+                matcher.update(queries);
             });
             if (previousSelection.contains(metricsProfile)) {
-                engine.getMetricsProfiles().add(metricsProfile);
+                matcher.getMetricsProfiles().add(metricsProfile);
                 menuItem.setSelected(true);
             }
             metricsProfilesMenu.getItems().add(menuItem);
@@ -192,14 +203,14 @@ public class MetricsMatcher implements Initializable {
 
         touchRunState();
 
-        if (engine.getMetricsProfiles().isEmpty()) {
+        if (matcher.getMetricsProfiles().isEmpty()) {
             if (previousSelection.isEmpty() && !metricsProfilesMenu.getItems().isEmpty()) {
                 CheckMenuItem firstMenuItem = (CheckMenuItem) metricsProfilesMenu.getItems().get(0);
                 firstMenuItem.setSelected(true);
                 firstMenuItem.getOnAction().handle(null);
             } else {
-                selectedMetricsProfilesText.setValue("0");
-                selectedMetricsProfilesTooltipText.setValue(null);
+                selectedMetricsProfilesLabel.setText("0");
+                selectedMetricsProfilesTooltip.setText("");
             }
         }
     }
@@ -223,21 +234,65 @@ public class MetricsMatcher implements Initializable {
     public void runAction() {
         runLockMenuItems(true);
 
+        resultCounters.setVisible(false);
+        progressBar.setVisible(true);
         progressBar.setProgress(0);
 
-        final double step = 1d / engine.getTasks().size();
+        final double step = 1d / matcher.getTasks().size();
 
         new Thread(() -> {
             try {
-                engine.run(() -> Platform.runLater(() -> {
+                matcher.run(() -> Platform.runLater(() -> {
                     table.refresh();
                     progressBar.setProgress(progressBar.getProgress() + step);
                 }));
             } catch (MetricsException e) {
                 ErrorDialog.show("Can't run tasks", e);
             }
-            runLockMenuItems(false);
+            Platform.runLater(() -> {
+                progressBar.setVisible(false);
+                updateCounters();
+                resultCounters.setVisible(true);
+                runLockMenuItems(false);
+            });
         }).start();
+    }
+
+
+    private void updateCounters() {
+        int countOk = 0;
+        int countError = 0;
+        int countMismatch = 0;
+        int countSkip = 0;
+        for (Task task : matcher.getTasks()) {
+            switch (task.getStatus()) {
+                case OK:
+                    countOk++;
+                    break;
+                case ERROR:
+                    countError++;
+                    break;
+                case MISMATCH:
+                    countMismatch++;
+                    break;
+                case SKIP:
+                    countSkip++;
+                    break;
+            }
+        }
+
+        setCounterLabel(counterOkLabel, countOk);
+        setCounterLabel(counterErrorLabel, countError);
+        setCounterLabel(counterMismatchLabel, countMismatch);
+        setCounterLabel(counterSkipLabel, countSkip);
+    }
+
+    private static void setCounterLabel(Label label, int counter) {
+        label.setText("" + counter);
+        label.getStyleClass().remove("empty");
+        if (counter == 0) {
+            label.getStyleClass().add("empty");
+        }
     }
 
     public void stopAction() {
@@ -246,7 +301,7 @@ public class MetricsMatcher implements Initializable {
     }
 
     private void touchRunState() {
-        runMenuItem.setDisable(engine.getDataSource() == null || engine.getMetricsProfiles().isEmpty());
+        runMenuItem.setDisable(matcher.getDataSource() == null || matcher.getMetricsProfiles().isEmpty());
     }
 
     private void runLockMenuItems(boolean lock) {
@@ -269,5 +324,19 @@ public class MetricsMatcher implements Initializable {
 
     public final void exitAction() {
         Platform.exit();
+    }
+
+    public void stopOnErrorAction(ActionEvent event) {
+        if (event.getSource() instanceof CheckMenuItem) {
+            CheckMenuItem checkMenuItem = (CheckMenuItem) event.getSource();
+            matcher.setStopOnError(checkMenuItem.isSelected());
+        }
+    }
+
+    public void stopOnMismatchAction(ActionEvent event) {
+        if (event.getSource() instanceof CheckMenuItem) {
+            CheckMenuItem checkMenuItem = (CheckMenuItem) event.getSource();
+            matcher.setStopOnMismatch(checkMenuItem.isSelected());
+        }
     }
 }

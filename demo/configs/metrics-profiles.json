@@ -1,23 +1,33 @@
 [
   {
-    "name": "Valid queries",
+    "name": "Matched queries",
     "metrics": {
       "select-date": "2019-02-28",
+      "select-date-time": "2019-02-28 15:25:59",
       "select-float": 123.456,
       "select-integer": 123,
       "select-notitle": 1,
-      "select-string": "Abc123"
+      "select-string": "Abc123",
+      "select-null": null
+    }
+  },
+  {
+    "name": "Not-matched queries",
+    "metrics": {
+      "select-date": "2019-01-28",
+      "select-date-time": "2019-02-28 15:21:59",
+      "select-float": 123.4567,
+      "select-integer": 1234,
+      "select-notitle": 11,
+      "select-string": "Abc1234",
+      "select-null": "value"
     }
   },
   {
     "name": "Broken queries",
     "metrics": {
-      "select-date": "2019-02-21",
-      "select-float": 456.789,
-      "select-integer": 321,
-      "select-notitle": 1,
-      "select-string": "Abc321",
-      "select-broken": "Abc321"
+      "select-broken": "Abc321",
+      "select-none": 1
     }
   },
   {

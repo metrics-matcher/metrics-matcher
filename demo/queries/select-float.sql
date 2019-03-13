@@ -1,2 +1,2 @@
 -- Select float number
-SELECT 123.345 FROM DUAL
+SELECT 123.456 FROM DUAL

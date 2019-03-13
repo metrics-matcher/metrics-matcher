@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
     <top>
@@ -25,8 +26,8 @@
                 <MenuItem text="Run" fx:id="runMenuItem" onAction="#runAction"/>
                 <MenuItem text="Stop" fx:id="stopMenuItem" onAction="#stopAction" disable="true"/>
                 <SeparatorMenuItem/>
-                <CheckMenuItem text="Stop on error" onAction="#showNotImplemented"/>
-                <CheckMenuItem text="Stop on mismatch" onAction="#showNotImplemented"/>
+                <CheckMenuItem text="Stop on error" onAction="#stopOnErrorAction"/>
+                <CheckMenuItem text="Stop on mismatch" onAction="#stopOnMismatchAction"/>
             </Menu>
 
             <Menu text="Help">
@@ -81,26 +82,59 @@
             </padding>
 
             <Label text="Data source:"/>
-            <Label fx:id="selectedDataSourceLabel" minWidth="15">
+            <Label fx:id="selectedDataSourceLabel" text="#" minWidth="15">
                 <tooltip>
                     <Tooltip fx:id="selectedDataSourceTooltip"/>
                 </tooltip>
             </Label>
 
             <Separator orientation="VERTICAL"/>
+
             <Label text="Metrics profiles:"/>
-            <Label fx:id="selectedMetricsProfilesLabel" minWidth="15">
+            <Label fx:id="selectedMetricsProfilesLabel" text="#" minWidth="15">
                 <tooltip>
                     <Tooltip fx:id="selectedMetricsProfilesTooltip"/>
                 </tooltip>
             </Label>
 
+            <Separator orientation="VERTICAL"/>
 
+            <Label text="Metrics:"/>
+            <Label fx:id="selectedMetricsLabel" text="#"  minWidth="15"/>
             <Separator orientation="VERTICAL"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <ProgressBar fx:id="progressBar" progress="0" prefWidth="100"/>
+            <StackPane>
+                <HBox fx:id="resultCounters" spacing="10" alignment="CENTER_RIGHT" visible="false">
+                    <Label text="Results:"/>
+                    <Label text="#" fx:id="counterOkLabel" styleClass="counter,ok">
+                        <tooltip>
+                            <Tooltip text="OK"/>
+                        </tooltip>
+                    </Label>
+                    <Label text="-"/>
+                    <Label text="#" fx:id="counterMismatchLabel" styleClass="counter,mismatch">
+                        <tooltip>
+                            <Tooltip text="MISMATCH"/>
+                        </tooltip>
+                    </Label>
+                    <Label text="-"/>
+                    <Label text="#" fx:id="counterErrorLabel" styleClass="counter,error">
+                        <tooltip>
+                            <Tooltip text="ERROR"/>
+                        </tooltip>
+                    </Label>
+                    <Label text="-"/>
+                    <Label text="#" fx:id="counterSkipLabel" styleClass="counter,skip">
+                        <tooltip>
+                            <Tooltip text="SKIP"/>
+                        </tooltip>
+                    </Label>
+                </HBox>
+                <ProgressBar fx:id="progressBar" progress="0" prefWidth="250" visible="false"/>
+            </StackPane>
+
         </HBox>
 
     </bottom>

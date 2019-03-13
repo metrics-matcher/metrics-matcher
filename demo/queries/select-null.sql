@@ -1,0 +1,2 @@
+-- Select NULL
+SELECT NULL FROM DUAL

@@ -10,13 +10,13 @@ public class Task {
     private final String queryTitle;
     private final String querySql;
 
-    private final Object expected;
+    private final String expected;
 
-    private Object result;
+    private String result;
     private Status status;
     private Double duration;
 
     public enum Status {
-        OK, MISMATCH, ERROR
+        OK, MISMATCH, ERROR, SKIP
     }
 }
