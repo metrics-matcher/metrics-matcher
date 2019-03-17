@@ -1,6 +1,7 @@
 package io.github.metrics_matcher.dialogs;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -15,24 +16,24 @@ public class AboutDialog {
         Alert dialog = new Alert(Alert.AlertType.INFORMATION);
         dialog.setTitle("About");
         dialog.initStyle(StageStyle.UTILITY);
-        dialog.setHeaderText("Metrics matcher is a free database testing tool\n"
+        dialog.setHeaderText("Metrics matcher is a free database testing tool.\n"
                 + "Copyright (c) 2019 Metrics matcher, Xantorohara\n"
                 + "MIT License"
         );
         dialog.setGraphic(new ImageView(new Image(AboutDialog.class.getResourceAsStream("../images/icon.png"))));
 
-        dialog.getDialogPane().setPrefSize(400d, 220d);
 
-        dialog.getDialogPane().setBackground(
-                new Background(
-                        new BackgroundImage(
-                                new Image(AboutDialog.class.getResourceAsStream("../images/mushrooms.png")),
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.CENTER,
-                                BackgroundSize.DEFAULT)
-                )
-        );
+        BackgroundImage backgroundImage = new BackgroundImage(
+                new Image(AboutDialog.class.getResourceAsStream("../images/mushrooms.png")),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT);
+
+        Label mushrooms = new Label();
+        mushrooms.setPrefHeight(128);
+        mushrooms.setBackground(new Background(backgroundImage));
+        dialog.getDialogPane().setContent(mushrooms);
         dialog.showAndWait();
     }
 }
