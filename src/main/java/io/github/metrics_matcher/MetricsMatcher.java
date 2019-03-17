@@ -48,8 +48,6 @@ public class MetricsMatcher implements Initializable {
     public Tooltip selectedMetricsProfilesTooltip;
     public Label selectedMetricsLabel;
 
-    private final ToggleGroup dataSourceToggleGroup = new ToggleGroup();
-
     public ProgressBar progressBar;
     public HBox resultCounters;
     public Label counterOkLabel;
@@ -57,13 +55,11 @@ public class MetricsMatcher implements Initializable {
     public Label counterMismatchLabel;
     public Label counterSkipLabel;
 
-
     private DataSource selectedDataSource;
-    private final List<MetricsProfile> selectedMetricsProfiles = new ArrayList<>();
     private List<Query> queries;
-
+    private final List<MetricsProfile> selectedMetricsProfiles = new ArrayList<>();
     private final ObservableList<Task> tasks = FXCollections.observableArrayList();
-
+    private final ToggleGroup dataSourceToggleGroup = new ToggleGroup();
     private final Matcher matcher = new Matcher();
 
     @Override
@@ -71,7 +67,6 @@ public class MetricsMatcher implements Initializable {
         synchronizeAction();
         createTable();
     }
-
 
     private void createTable() {
         PseudoClass rownumPseudoClass = PseudoClass.getPseudoClass("rownum");
@@ -116,6 +111,8 @@ public class MetricsMatcher implements Initializable {
                         break;
                     case SKIP:
                         pseudoClassStateChanged(skipRowPseudoClass, true);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -241,6 +238,7 @@ public class MetricsMatcher implements Initializable {
     }
 
     @SneakyThrows
+    @SuppressWarnings("checkstyle:MagicNumber")
     private static void sleep() {
         Thread.sleep((long) (Math.random() * 1000));
     }
@@ -313,7 +311,7 @@ public class MetricsMatcher implements Initializable {
     }
 
     public void stopAction() {
-        //todo stop process
+        matcher.setStop(true);
         runLockMenuItems(false);
     }
 

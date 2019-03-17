@@ -16,11 +16,13 @@ public class Matcher {
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final int DATE_LENGTH = "yyyy-MM-dd".length();
 
+    private volatile boolean stop;
     private volatile boolean stopOnMismatch;
     private volatile boolean stopOnError;
 
     public final void run(DataSource dataSource, List<Task> tasks, Runnable progress)
             throws MetricsException {
+        stop = false;
         boolean hasError = false;
         boolean hasMismatch = false;
 
@@ -28,7 +30,7 @@ public class Matcher {
 
         try (Jdbc jdbc = new Jdbc()) {
             for (Task task : tasks) {
-                if (hasError && stopOnError || hasMismatch && stopOnMismatch) {
+                if (stop || hasError && stopOnError || hasMismatch && stopOnMismatch) {
                     task.setResultValue(null);
                     task.setStatus(Task.Status.SKIP);
                     if (progress != null) {
