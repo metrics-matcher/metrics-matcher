@@ -10,7 +10,13 @@
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
 
+
+    <module name="SuppressWarningsFilter" />
+
     <module name="TreeWalker">
+
+        <module name="SuppressWarnings"/>
+        <module name="SuppressWarningsHolder" />
 
         <!-- Blocks: http://checkstyle.sourceforge.net/config_blocks.html -->
         <module name="SuppressWarningsHolder" />
@@ -42,6 +48,7 @@
         <module name="EqualsHashCode"/>
         <module name="ExplicitInitialization"/>
         <module name="FallThrough"/>
+        <module name="IllegalCatch"/>
         <module name="IllegalInstantiation"/>
         <module name="IllegalThrows"/>
         <module name="IllegalTokenText"/>

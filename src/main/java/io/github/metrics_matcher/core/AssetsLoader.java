@@ -96,6 +96,7 @@ public final class AssetsLoader {
         return queries;
     }
 
+    @SuppressWarnings("checkstyle:IllegalCatch")
     public static void loadDrivers(String directory) throws MetricsException {
         log.info("Loading drivers from [{}]", directory);
         List<File> files = listFiles(directory, ".jar");

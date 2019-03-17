@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Slf4j
+@SuppressWarnings("checkstyle:VisibilityModifier")
 public class MetricsMatcher implements Initializable {
     public Menu dataSourceMenu;
     public Menu metricsProfilesMenu;

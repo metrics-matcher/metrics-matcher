@@ -25,6 +25,12 @@ public class Task {
         OK, MISMATCH, ERROR, SKIP
     }
 
+    public void reset() {
+        resultValue = null;
+        status = null;
+        duration = null;
+    }
+
     public static List<Task> tasksFrom(List<MetricsProfile> metricsProfiles, Collection<Query> queries) {
         List<Task> tasks = new ArrayList<>();
 
@@ -57,11 +63,12 @@ public class Task {
     }
 
     private static String substituteParams(String sql, Map<String, String> params) {
+        String result = sql;
         if (params != null) {
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                sql = sql.replace("${" + entry.getKey() + "}", entry.getValue());
+                result = result.replace("${" + entry.getKey() + "}", entry.getValue());
             }
         }
-        return sql;
+        return result;
     }
 }

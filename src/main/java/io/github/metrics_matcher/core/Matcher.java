@@ -23,15 +23,13 @@ public class Matcher {
             throws MetricsException {
         boolean hasError = false;
         boolean hasMismatch = false;
-        for (Task task : tasks) {
-            task.setResultValue("");
-            task.setStatus(null);
-        }
+
+        tasks.forEach(Task::reset);
 
         try (Jdbc jdbc = new Jdbc()) {
             for (Task task : tasks) {
                 if (hasError && stopOnError || hasMismatch && stopOnMismatch) {
-                    task.setResultValue("");
+                    task.setResultValue(null);
                     task.setStatus(Task.Status.SKIP);
                     if (progress != null) {
                         progress.run();
@@ -67,7 +65,7 @@ public class Matcher {
                     task.setResultValue(formatError(e));
                     hasError = true;
                 } finally {
-                    task.setDuration((System.currentTimeMillis() - timestamp) * 1000 / 1000000d);
+                    task.setDuration(round3(System.currentTimeMillis() - timestamp));
                 }
 
                 if (progress != null) {
@@ -78,6 +76,11 @@ public class Matcher {
             log.error("Can't close database connection", e);
             throw new MetricsException("Can't database connection", e);
         }
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private static double round3(long value) {
+        return value * 1000 / 1000000d;
     }
 
     private static String formatDate(Date date, String expectedValue) {
