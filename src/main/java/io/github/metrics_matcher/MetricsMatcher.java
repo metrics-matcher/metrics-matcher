@@ -25,11 +25,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 @Slf4j
 @SuppressWarnings("checkstyle:VisibilityModifier")
 public class MetricsMatcher implements Initializable {
+
+    private static final PseudoClass EMPTY_PSEUDO_CLASS = PseudoClass.getPseudoClass("empty");
+    private static final PseudoClass ROWNUM_PSEUDO_CLASS = PseudoClass.getPseudoClass("rownum");
+    private static final PseudoClass OK_PSEUDO_CLASS = PseudoClass.getPseudoClass("ok");
+    private static final PseudoClass MISMATCH_PSEUDO_CLASS = PseudoClass.getPseudoClass("mismatch");
+    private static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
+    private static final PseudoClass SKIP_PSEUDO_CLASS = PseudoClass.getPseudoClass("skip");
+
     public Menu dataSourceMenu;
     public Menu metricsProfilesMenu;
     public Menu runMenu;
@@ -67,55 +74,58 @@ public class MetricsMatcher implements Initializable {
     }
 
     private void createTable() {
-        PseudoClass rownumPseudoClass = PseudoClass.getPseudoClass("rownum");
-        PseudoClass mismatchRowPseudoClass = PseudoClass.getPseudoClass("mismatch");
-        PseudoClass errorRowPseudoClass = PseudoClass.getPseudoClass("error");
-        PseudoClass skipRowPseudoClass = PseudoClass.getPseudoClass("skip");
-        PseudoClass okRowPseudoClass = PseudoClass.getPseudoClass("ok");
 
         rownumColumn.setCellFactory(column -> new TableCell<Task, String>() {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : Integer.toString(getIndex() + 1));
-                pseudoClassStateChanged(rownumPseudoClass, true);
+                pseudoClassStateChanged(ROWNUM_PSEUDO_CLASS, true);
             }
         });
 
         executionStatus.setCellFactory(column -> new TableCell<Task, Task.Status>() {
             protected void updateItem(Task.Status item, boolean empty) {
                 super.updateItem(item, empty);
-                pseudoClassStateChanged(mismatchRowPseudoClass, false);
-                pseudoClassStateChanged(errorRowPseudoClass, false);
-                pseudoClassStateChanged(okRowPseudoClass, false);
-                pseudoClassStateChanged(skipRowPseudoClass, false);
+
+                toggleRowClass(this, item);
 
                 if (item == null || empty) {
                     setText(null);
                     setGraphic(null);
-                    return;
-                }
-
-                setText(item.name());
-
-                switch (item) {
-                    case OK:
-                        pseudoClassStateChanged(okRowPseudoClass, true);
-                        break;
-                    case MISMATCH:
-                        pseudoClassStateChanged(mismatchRowPseudoClass, true);
-                        break;
-                    case ERROR:
-                        pseudoClassStateChanged(errorRowPseudoClass, true);
-                        break;
-                    case SKIP:
-                        pseudoClassStateChanged(skipRowPseudoClass, true);
-                        break;
-                    default:
-                        break;
+                } else {
+                    setText(item.name());
                 }
             }
         });
         table.setItems(tasks);
+    }
+
+    private static void toggleRowClass(TableCell tableCell, Task.Status status) {
+        tableCell.pseudoClassStateChanged(MISMATCH_PSEUDO_CLASS, false);
+        tableCell.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
+        tableCell.pseudoClassStateChanged(OK_PSEUDO_CLASS, false);
+        tableCell.pseudoClassStateChanged(SKIP_PSEUDO_CLASS, false);
+
+        if (status == null) {
+            return;
+        }
+
+        switch (status) {
+            case OK:
+                tableCell.pseudoClassStateChanged(OK_PSEUDO_CLASS, true);
+                break;
+            case MISMATCH:
+                tableCell.pseudoClassStateChanged(MISMATCH_PSEUDO_CLASS, true);
+                break;
+            case ERROR:
+                tableCell.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+                break;
+            case SKIP:
+                tableCell.pseudoClassStateChanged(SKIP_PSEUDO_CLASS, true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void reloadDataSources() {
@@ -297,10 +307,7 @@ public class MetricsMatcher implements Initializable {
 
     private static void setCounterLabel(Label label, int counter) {
         label.setText("" + counter);
-        label.getStyleClass().remove("empty");
-        if (counter == 0) {
-            label.getStyleClass().add("empty");
-        }
+        label.pseudoClassStateChanged(EMPTY_PSEUDO_CLASS, counter == 0);
     }
 
     public void stopAction() {

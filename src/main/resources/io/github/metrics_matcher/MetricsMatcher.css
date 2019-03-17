@@ -97,7 +97,7 @@ Label.skip {
     -fx-text-fill: #FFF;
 }
 
-Label.empty {
+Label.counter:empty {
     -fx-background-color: linear-gradient(to bottom, #CCCCCC, #999999);
     -fx-text-fill: #000;
 }
