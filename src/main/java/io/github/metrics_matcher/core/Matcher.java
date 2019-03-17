@@ -16,8 +16,8 @@ public class Matcher {
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final int DATE_LENGTH = "yyyy-MM-dd".length();
 
-    private volatile boolean stopOnMismatch = false;
-    private volatile boolean stopOnError = false;
+    private volatile boolean stopOnMismatch;
+    private volatile boolean stopOnError;
 
     public final void run(DataSource dataSource, List<Task> tasks, Runnable progress)
             throws MetricsException {
@@ -51,8 +51,8 @@ public class Matcher {
 
                     task.setResultValue(result.toString());
 
-                    if (result == Jdbc.SpecialResult.NO_RESULT ||
-                            result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
+                    if (result == Jdbc.SpecialResult.NO_RESULT
+                            || result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
                         task.setStatus(Task.Status.ERROR);
                         task.setResultValue(result.toString());
                         hasError = true;

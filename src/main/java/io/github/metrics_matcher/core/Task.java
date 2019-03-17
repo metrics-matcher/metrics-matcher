@@ -30,10 +30,10 @@ public class Task {
 
         for (MetricsProfile metricsProfile : metricsProfiles) {
             for (Map.Entry<String, String> metrics : metricsProfile.getMetrics().entrySet()) {
-                TaskBuilder taskBuilder = Task.builder()
-                        .metricsProfileName(metricsProfile.getName())
-                        .metricsId(metrics.getKey())
-                        .expectedValue(Objects.toString(metrics.getValue(), "null"));
+                TaskBuilder taskBuilder = Task.builder().
+                        metricsProfileName(metricsProfile.getName()).
+                        metricsId(metrics.getKey()).
+                        expectedValue(Objects.toString(metrics.getValue(), "null"));
 
                 for (Query query : queries) {
                     if (metrics.getKey().equals(query.getId())) {

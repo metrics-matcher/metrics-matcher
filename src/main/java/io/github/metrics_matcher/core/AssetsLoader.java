@@ -68,7 +68,7 @@ public final class AssetsLoader {
 
     public static List<Query> loadQueries(String directory) throws MetricsException {
         log.info("Loading queries from [{}]", directory);
-        List<File> files = listFiles(directory, ".sql");
+        List<File> files = listFiles(directory, SQL_FILE_EXTENSION);
         if (files.isEmpty()) {
             throw new MetricsException(format(MSG_FILES_NOT_FOUND, directory));
         }
