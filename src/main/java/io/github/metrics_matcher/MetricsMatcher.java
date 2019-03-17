@@ -4,6 +4,7 @@ import io.github.metrics_matcher.core.AssetsLoader;
 import io.github.metrics_matcher.core.Matcher;
 import io.github.metrics_matcher.core.MetricsException;
 import io.github.metrics_matcher.core.Task;
+import io.github.metrics_matcher.dialogs.AboutDialog;
 import io.github.metrics_matcher.dialogs.ErrorDialog;
 import io.github.metrics_matcher.dialogs.NotImplementedDialog;
 import io.github.metrics_matcher.dto.DataSource;
@@ -15,11 +16,18 @@ import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,7 +145,7 @@ public class MetricsMatcher implements Initializable {
         try {
             dataSources = AssetsLoader.loadDataSources("configs/data-sources.json");
         } catch (MetricsException e) {
-            ErrorDialog.showError("Can't read data sources", e, HelpRefs.DATA_SOURCES);
+            ErrorDialog.show("Can't read data sources", e, HelpRefs.DATA_SOURCES);
             return;
         }
 
@@ -178,7 +186,7 @@ public class MetricsMatcher implements Initializable {
         try {
             metricsProfiles = AssetsLoader.loadMetricsProfiles("configs/metrics-profiles.json");
         } catch (MetricsException e) {
-            ErrorDialog.showError("Can't read metrics profiles", e, HelpRefs.METRICS_PROFILES);
+            ErrorDialog.show("Can't read metrics profiles", e, HelpRefs.METRICS_PROFILES);
             return;
         }
 
@@ -226,7 +234,7 @@ public class MetricsMatcher implements Initializable {
             queries = AssetsLoader.loadQueries("queries");
         } catch (MetricsException e) {
             queries = Collections.emptyList();
-            ErrorDialog.showError("Can't read queries", e, HelpRefs.QUERIES);
+            ErrorDialog.show("Can't read queries", e, HelpRefs.QUERIES);
         }
     }
 
@@ -234,7 +242,7 @@ public class MetricsMatcher implements Initializable {
         try {
             AssetsLoader.loadDrivers("drivers");
         } catch (MetricsException e) {
-            ErrorDialog.showError("Can't load drivers", e, HelpRefs.DRIVERS);
+            ErrorDialog.show("Can't load drivers", e, HelpRefs.DRIVERS);
         }
     }
 
@@ -263,7 +271,7 @@ public class MetricsMatcher implements Initializable {
                     sleep();
                 });
             } catch (MetricsException e) {
-                ErrorDialog.showError("Can't run tasks", e);
+                ErrorDialog.show("Can't run tasks", e);
             }
             Platform.runLater(() -> {
                 progressBar.setVisible(false);
@@ -353,5 +361,17 @@ public class MetricsMatcher implements Initializable {
             CheckMenuItem checkMenuItem = (CheckMenuItem) event.getSource();
             matcher.setStopOnMismatch(checkMenuItem.isSelected());
         }
+    }
+
+    public void onlineHelpAction() {
+        try {
+            Desktop.getDesktop().browse(new URI(HelpRefs.HELP_URL));
+        } catch (IOException | URISyntaxException ex) {
+            log.error("Can't open web browser", ex);
+        }
+    }
+
+    public void aboutAction() {
+        AboutDialog.show();
     }
 }

@@ -31,8 +31,8 @@
             </Menu>
 
             <Menu text="Help">
-                <MenuItem text="Online help" onAction="#showNotImplemented"/>
-                <MenuItem text="About" onAction="#showNotImplemented"/>
+                <MenuItem text="Online help" onAction="#onlineHelpAction"/>
+                <MenuItem text="About" onAction="#aboutAction"/>
             </Menu>
         </MenuBar>
     </top>

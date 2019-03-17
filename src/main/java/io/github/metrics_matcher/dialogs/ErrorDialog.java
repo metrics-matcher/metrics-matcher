@@ -16,15 +16,16 @@ public class ErrorDialog {
 
     private static final String ERROR_TITLE = "Error";
 
-    public static void showError(String problem, Exception e) {
+    public static void show(String problem, Exception e) {
         log.error(problem, e);
 
         Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
         alert.setTitle(ERROR_TITLE);
         alert.setHeaderText(problem);
+        alert.showAndWait();
     }
 
-    public static void showError(String problem, Exception e, String helpUrl) {
+    public static void show(String problem, Exception e, String helpUrl) {
         log.error(problem, e);
 
         ButtonType troubleshooting = new ButtonType("See how to troubleshoot this", ButtonBar.ButtonData.HELP);
