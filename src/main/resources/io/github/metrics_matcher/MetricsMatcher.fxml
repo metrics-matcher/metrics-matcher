@@ -87,20 +87,12 @@
             </padding>
 
             <Label text="Data source:"/>
-            <Label fx:id="selectedDataSourceLabel" text="#" minWidth="15">
-                <tooltip>
-                    <Tooltip fx:id="selectedDataSourceTooltip"/>
-                </tooltip>
-            </Label>
+            <Label fx:id="selectedDataSourceLabel" text="#" minWidth="15"/>
 
             <Separator orientation="VERTICAL"/>
 
             <Label text="Metrics profiles:"/>
-            <Label fx:id="selectedMetricsProfilesLabel" text="#" minWidth="15">
-                <tooltip>
-                    <Tooltip fx:id="selectedMetricsProfilesTooltip"/>
-                </tooltip>
-            </Label>
+            <Label fx:id="selectedMetricsProfilesLabel" text="#" minWidth="15"/>
 
             <Separator orientation="VERTICAL"/>
 

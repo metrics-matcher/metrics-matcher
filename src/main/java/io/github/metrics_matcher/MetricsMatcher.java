@@ -43,9 +43,7 @@ public class MetricsMatcher implements Initializable {
     public TableColumn<Task, Task.Status> executionStatus;
 
     public Label selectedDataSourceLabel;
-    public Tooltip selectedDataSourceTooltip;
     public Label selectedMetricsProfilesLabel;
-    public Tooltip selectedMetricsProfilesTooltip;
     public Label selectedMetricsLabel;
 
     public ProgressBar progressBar;
@@ -124,7 +122,6 @@ public class MetricsMatcher implements Initializable {
         dataSourceMenu.getItems().clear();
         runMenuItem.setDisable(true);
         selectedDataSourceLabel.setText("None");
-        selectedDataSourceTooltip.setText("");
 
         List<DataSource> dataSources;
         try {
@@ -142,13 +139,11 @@ public class MetricsMatcher implements Initializable {
             menuItem.setOnAction(e -> {
                 selectedDataSource = dataSource;
                 selectedDataSourceLabel.setText(dataSource.getName());
-                selectedDataSourceTooltip.setText(dataSource.getUrl());
                 touchRunState();
             });
             if (dataSource.equals(previousSelection)) {
                 selectedDataSource = dataSource;
                 selectedDataSourceLabel.setText(dataSource.getName());
-                selectedDataSourceTooltip.setText(dataSource.getUrl());
                 menuItem.setSelected(true);
             }
             dataSourceMenu.getItems().add(menuItem);
@@ -188,9 +183,6 @@ public class MetricsMatcher implements Initializable {
                     selectedMetricsProfiles.remove(metricsProfile);
                 }
                 selectedMetricsProfilesLabel.setText("" + selectedMetricsProfiles.size());
-                selectedMetricsProfilesTooltip.setText(
-                        selectedMetricsProfiles.stream().map(MetricsProfile::getName).collect(Collectors.joining(", "))
-                );
 
                 selectedMetricsLabel.setText(
                         "" + selectedMetricsProfiles.stream().mapToInt(mp -> mp.getMetrics().size()).sum()
@@ -215,7 +207,6 @@ public class MetricsMatcher implements Initializable {
                 firstMenuItem.getOnAction().handle(null);
             } else {
                 selectedMetricsProfilesLabel.setText("0");
-                selectedMetricsProfilesTooltip.setText("");
             }
         }
     }
@@ -292,6 +283,8 @@ public class MetricsMatcher implements Initializable {
                     break;
                 case SKIP:
                     countSkip++;
+                    break;
+                default:
                     break;
             }
         }

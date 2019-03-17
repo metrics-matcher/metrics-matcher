@@ -31,8 +31,7 @@ public class Matcher {
         try (Jdbc jdbc = new Jdbc()) {
             for (Task task : tasks) {
                 if (stop || hasError && stopOnError || hasMismatch && stopOnMismatch) {
-                    task.setResultValue(null);
-                    task.setStatus(Task.Status.SKIP);
+                    task.setSkipState();
                     if (progress != null) {
                         progress.run();
                     }
@@ -49,26 +48,21 @@ public class Matcher {
                         result = formatDate((Date) result, task.getExpectedValue());
                     }
 
-                    task.setResultValue(result.toString());
-
-                    if (result == Jdbc.SpecialResult.NO_RESULT
-                            || result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
-                        task.setStatus(Task.Status.ERROR);
-                        task.setResultValue(result.toString());
+                    if (result == Jdbc.SpecialResult.NO_RESULT || result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
+                        task.setErrorState(result.toString());
                         hasError = true;
                     } else if (Objects.equals(result.toString(), task.getExpectedValue())) {
-                        task.setStatus(Task.Status.OK);
+                        task.setOkState(result.toString());
                     } else {
-                        task.setStatus(Task.Status.MISMATCH);
+                        task.setMismatchState(result.toString());
                         hasMismatch = true;
                     }
                 } catch (SQLException e) {
-                    task.setStatus(Task.Status.ERROR);
-                    task.setResultValue(formatError(e));
+                    task.setErrorState(formatError(e));
                     hasError = true;
-                } finally {
-                    task.setDuration(round3(System.currentTimeMillis() - timestamp));
                 }
+
+                task.setDuration(round3(System.currentTimeMillis() - timestamp));
 
                 if (progress != null) {
                     progress.run();

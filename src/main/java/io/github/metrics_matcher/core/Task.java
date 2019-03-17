@@ -31,6 +31,25 @@ public class Task {
         duration = null;
     }
 
+    public void setOkState(String resultValue) {
+        this.status = Status.OK;
+        this.resultValue = resultValue;
+    }
+
+    public void setMismatchState(String resultValue) {
+        this.status = Status.MISMATCH;
+        this.resultValue = resultValue;
+    }
+
+    public void setSkipState() {
+        this.status = Status.SKIP;
+    }
+
+    public void setErrorState(String error) {
+        this.status = Task.Status.ERROR;
+        this.resultValue = error;
+    }
+
     public static List<Task> tasksFrom(List<MetricsProfile> metricsProfiles, Collection<Query> queries) {
         List<Task> tasks = new ArrayList<>();
 
