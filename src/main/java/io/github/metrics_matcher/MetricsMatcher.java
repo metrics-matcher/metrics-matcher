@@ -268,7 +268,7 @@ public class MetricsMatcher implements Initializable {
                         table.refresh();
                         progressBar.setProgress(progressBar.getProgress() + step);
                     });
-                    sleep();
+                    //sleep();
                 });
             } catch (MetricsException e) {
                 ErrorDialog.show("Can't run tasks", e);
