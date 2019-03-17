@@ -9,7 +9,19 @@ import java.sql.*;
 public class Jdbc implements AutoCloseable {
 
     public enum SpecialResult {
-        EMPTY
+        NO_RESULT("No result"),
+        MULTIPLE_ROWS("Multiple results");
+
+        private String title;
+
+        SpecialResult(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return title;
+        }
     }
 
     private Connection connection;
@@ -32,12 +44,18 @@ public class Jdbc implements AutoCloseable {
         ) {
             log.info("Executing [{}]", sql);
             if (resultSet.next()) {
-                Object tmp = resultSet.getObject(1);
-                log.info("Received [{}]", tmp);
-                return tmp;
+                Object value = resultSet.getObject(1);
+
+                log.info("Received [{}]", value);
+                if (resultSet.next()) {
+                    log.warn("More than one row returned");
+                    return SpecialResult.MULTIPLE_ROWS;
+                } else {
+                    return value;
+                }
             } else {
                 log.warn("Empty result");
-                return SpecialResult.EMPTY;
+                return SpecialResult.NO_RESULT;
             }
         }
     }

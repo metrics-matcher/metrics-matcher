@@ -1,7 +1,7 @@
 package io.github.metrics_matcher;
 
 /**
- * Online links to help pages
+ * Links to online help pages
  */
 public class HelpRefs {
     public static final String HELP_URL = "https://metrics-matcher.github.io/";

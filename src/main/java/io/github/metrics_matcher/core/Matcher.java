@@ -1,99 +1,62 @@
 package io.github.metrics_matcher.core;
 
-
 import io.github.metrics_matcher.dto.DataSource;
-import io.github.metrics_matcher.dto.MetricsProfile;
-import io.github.metrics_matcher.dto.Query;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.Data;
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
+@Slf4j
 @Data
-public final class Matcher {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+public class Matcher {
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final int DATE_LENGTH = "yyyy-MM-dd".length();
 
-    private DataSource dataSource;
-    private final List<MetricsProfile> metricsProfiles = new ArrayList<>();
     private volatile boolean stopOnMismatch = false;
     private volatile boolean stopOnError = false;
 
-    private final ObservableList<Task> tasks = FXCollections.observableArrayList();
-
-    @SneakyThrows
-    private static void sleep() {
-        Thread.sleep((long) (Math.random() * 1000));
-    }
-
-    public final void update(Collection<Query> queries) {
-        tasks.clear();
-
-        for (MetricsProfile metricsProfile : metricsProfiles) {
-            for (Map.Entry<String, String> metrics : metricsProfile.getMetrics().entrySet()) {
-                for (Query query : queries) {
-                    if (metrics.getKey().equals(query.getId())) {
-                        String querySql = applyParams(query.getSql(), metricsProfile.getParams());
-                        String queryTitle = Objects.toString(query.getTitle(), query.getId());
-
-                        Task task = Task.builder()
-                                .metricsProfile(metricsProfile.getName())
-                                .queryTitle(queryTitle)
-                                .querySql(querySql)
-                                .expected(Objects.toString(metrics.getValue(), "NULL"))
-                                .build();
-                        tasks.add(task);
-                    }
-                }
-            }
-        }
-    }
-
-    private static String applyParams(String sql, Map<String, String> params) {
-        if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                sql = sql.replace("${" + entry.getKey() + "}", entry.getValue());
-            }
-        }
-        return sql;
-    }
-
-
-    public final void run(Runnable progress) throws MetricsException {
+    public final void run(DataSource dataSource, List<Task> tasks, Runnable progress)
+            throws MetricsException {
         boolean hasError = false;
         boolean hasMismatch = false;
+        for (Task task : tasks) {
+            task.setResultValue("");
+            task.setStatus(null);
+        }
+
         try (Jdbc jdbc = new Jdbc()) {
             for (Task task : tasks) {
                 if (hasError && stopOnError || hasMismatch && stopOnMismatch) {
-                    task.setResult("");
+                    task.setResultValue("");
                     task.setStatus(Task.Status.SKIP);
+                    if (progress != null) {
+                        progress.run();
+                    }
                     continue;
                 }
+
                 long timestamp = System.currentTimeMillis();
                 try {
                     Object result = jdbc.execute(dataSource, task.getQuerySql());
 
-                    sleep();
-
                     if (result == null) {
-                        result = "NULL";
+                        result = "null";
                     } else if (result instanceof Date) {
-                        if (task.getExpected() != null) {
-                            if (task.getExpected().length() == DATE_FORMAT.toPattern().length()) {
-                                result = DATE_FORMAT.format(result);
-                            } else if (task.getExpected().length() == DATE_TIME_FORMAT.toPattern().length()) {
-                                result = DATE_TIME_FORMAT.format(result);
-                            }
-                        }
+                        result = formatDate((Date) result, task.getExpectedValue());
                     }
 
-                    task.setResult(result.toString());
+                    task.setResultValue(result.toString());
 
-                    if (Objects.equals(result.toString(), task.getExpected())) {
+                    if (result == Jdbc.SpecialResult.NO_RESULT ||
+                            result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
+                        task.setStatus(Task.Status.ERROR);
+                        task.setResultValue(result.toString());
+                        hasError = true;
+                    } else if (Objects.equals(result.toString(), task.getExpectedValue())) {
                         task.setStatus(Task.Status.OK);
                     } else {
                         task.setStatus(Task.Status.MISMATCH);
@@ -101,16 +64,28 @@ public final class Matcher {
                     }
                 } catch (SQLException e) {
                     task.setStatus(Task.Status.ERROR);
-                    task.setResult(formatError(e));
+                    task.setResultValue(formatError(e));
                     hasError = true;
                 } finally {
                     task.setDuration((System.currentTimeMillis() - timestamp) * 1000 / 1000000d);
                 }
-                progress.run();
+
+                if (progress != null) {
+                    progress.run();
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new MetricsException("Can't create connection", e);
+            log.error("Can't close database connection", e);
+            throw new MetricsException("Can't database connection", e);
+        }
+    }
+
+    private static String formatDate(Date date, String expectedValue) {
+        String resultDate = DATE_TIME_FORMAT.format(date);
+        if (expectedValue != null && expectedValue.length() == DATE_LENGTH && resultDate.endsWith(" 00:00:00")) {
+            return resultDate.substring(0, DATE_LENGTH);
+        } else {
+            return resultDate;
         }
     }
 

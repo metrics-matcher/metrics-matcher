@@ -38,17 +38,17 @@ TableView .table-cell:ok {
     -fx-background-insets: 0 0 1 0;
 }
 
-TableView .table-row-cell:odd .table-cell:ok {
+TableView .table-row-cell:even .table-cell:ok {
     -fx-background-color: #74E374;
 }
 
 TableView .table-cell:mismatch {
-    -fx-background-color: #FFE258;
+    -fx-background-color: #FFC758;
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:mismatch {
-    -fx-background-color: #FFEA82;
+    -fx-background-color: #FFD582;
 }
 
 TableView .table-cell:error {
@@ -62,41 +62,42 @@ TableView .table-row-cell:even .table-cell:error {
 }
 
 TableView .table-cell:skip {
-    -fx-background-color: #6B50BF;
+    -fx-background-color: #4E6FBB;
     -fx-text-fill: #FFF;
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:skip {
-    -fx-background-color: #8E78D4;
+    -fx-background-color: #7691D1;
 }
 
 Label.counter {
     -fx-padding: 0 5;
     -fx-border-color: #FFF;
+    -fx-effect: dropshadow(three-pass-box, #999999, 2, 0, 0, 0);
 }
 
 Label.ok {
-    -fx-background-color: #29CC29;
+    -fx-background-color: linear-gradient(to bottom, #4AD64A, #05B905);
     -fx-text-fill: #000;
 }
 
 Label.mismatch {
-    -fx-background-color: #FFDC33;
+    -fx-background-color: linear-gradient(to bottom, #FFC758, #E79C07);
     -fx-text-fill: #000;
 }
 
 Label.error {
-    -fx-background-color: #FF3333;
+    -fx-background-color: linear-gradient(to bottom, #FF5858, #E70707);
     -fx-text-fill: #FFF;
 }
 
 Label.skip {
-    -fx-background-color: #5133AF;
+    -fx-background-color: linear-gradient(to bottom, #4E6FBB, #143D9B);
     -fx-text-fill: #FFF;
 }
 
 Label.empty {
-    -fx-background-color: #CCC;
+    -fx-background-color: linear-gradient(to bottom, #CCCCCC, #999999);
     -fx-text-fill: #000;
 }

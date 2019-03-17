@@ -9,6 +9,6 @@ import java.util.Map;
 @EqualsAndHashCode(of = "name")
 public class MetricsProfile {
     private String name;
-    private Map<String, String> params;
     private Map<String, String> metrics;
+    private Map<String, String> params;
 }

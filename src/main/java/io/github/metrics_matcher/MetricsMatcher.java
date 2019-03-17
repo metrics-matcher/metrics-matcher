@@ -10,15 +10,19 @@ import io.github.metrics_matcher.dto.DataSource;
 import io.github.metrics_matcher.dto.MetricsProfile;
 import io.github.metrics_matcher.dto.Query;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -53,7 +57,11 @@ public class MetricsMatcher implements Initializable {
     public Label counterSkipLabel;
 
 
+    private DataSource selectedDataSource;
+    private final List<MetricsProfile> selectedMetricsProfiles = new ArrayList<>();
     private List<Query> queries;
+
+    private final ObservableList<Task> tasks = FXCollections.observableArrayList();
 
     private final Matcher matcher = new Matcher();
 
@@ -61,7 +69,6 @@ public class MetricsMatcher implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         synchronizeAction();
         createTable();
-//        matcher.getTasks().addAll(TempData.DATA);
     }
 
 
@@ -112,7 +119,7 @@ public class MetricsMatcher implements Initializable {
                 }
             }
         });
-        table.setItems(matcher.getTasks());
+        table.setItems(tasks);
     }
 
     private void reloadDataSources() {
@@ -129,19 +136,19 @@ public class MetricsMatcher implements Initializable {
             return;
         }
 
-        DataSource previousSelection = matcher.getDataSource();
-        matcher.setDataSource(null);
+        DataSource previousSelection = selectedDataSource;
+        selectedDataSource = null;
         for (DataSource dataSource : dataSources) {
             RadioMenuItem menuItem = new RadioMenuItem(dataSource.getName());
             menuItem.setToggleGroup(dataSourceToggleGroup);
             menuItem.setOnAction(e -> {
-                matcher.setDataSource(dataSource);
+                selectedDataSource = dataSource;
                 selectedDataSourceLabel.setText(dataSource.getName());
                 selectedDataSourceTooltip.setText(dataSource.getUrl());
                 touchRunState();
             });
             if (dataSource.equals(previousSelection)) {
-                matcher.setDataSource(dataSource);
+                selectedDataSource = dataSource;
                 selectedDataSourceLabel.setText(dataSource.getName());
                 selectedDataSourceTooltip.setText(dataSource.getUrl());
                 menuItem.setSelected(true);
@@ -151,7 +158,7 @@ public class MetricsMatcher implements Initializable {
 
         touchRunState();
 
-        if (matcher.getDataSource() == null) {
+        if (selectedDataSource == null) {
             if (previousSelection == null && !dataSourceMenu.getItems().isEmpty()) {
                 RadioMenuItem firstMenuItem = (RadioMenuItem) dataSourceMenu.getItems().get(0);
                 firstMenuItem.setSelected(true);
@@ -172,30 +179,30 @@ public class MetricsMatcher implements Initializable {
             return;
         }
 
-        List<MetricsProfile> previousSelection = new ArrayList<>(matcher.getMetricsProfiles());
-        matcher.getMetricsProfiles().clear();
+        List<MetricsProfile> previousSelection = new ArrayList<>(selectedMetricsProfiles);
+        selectedMetricsProfiles.clear();
         for (MetricsProfile metricsProfile : metricsProfiles) {
             CheckMenuItem menuItem = new CheckMenuItem(metricsProfile.getName());
             menuItem.setOnAction(e -> {
                 if (menuItem.isSelected()) {
-                    matcher.getMetricsProfiles().add(metricsProfile);
+                    selectedMetricsProfiles.add(metricsProfile);
                 } else {
-                    matcher.getMetricsProfiles().remove(metricsProfile);
+                    selectedMetricsProfiles.remove(metricsProfile);
                 }
-                selectedMetricsProfilesLabel.setText("" + matcher.getMetricsProfiles().size());
+                selectedMetricsProfilesLabel.setText("" + selectedMetricsProfiles.size());
                 selectedMetricsProfilesTooltip.setText(
-                        matcher.getMetricsProfiles().stream().map(MetricsProfile::getName).collect(Collectors.joining(", "))
+                        selectedMetricsProfiles.stream().map(MetricsProfile::getName).collect(Collectors.joining(", "))
                 );
 
                 selectedMetricsLabel.setText(
-                        "" + matcher.getMetricsProfiles().stream().mapToInt(mp -> mp.getMetrics().size()).sum()
+                        "" + selectedMetricsProfiles.stream().mapToInt(mp -> mp.getMetrics().size()).sum()
                 );
 
                 touchRunState();
-                matcher.update(queries);
+                tasks.setAll(Task.tasksFrom(selectedMetricsProfiles, queries));
             });
             if (previousSelection.contains(metricsProfile)) {
-                matcher.getMetricsProfiles().add(metricsProfile);
+                selectedMetricsProfiles.add(metricsProfile);
                 menuItem.setSelected(true);
             }
             metricsProfilesMenu.getItems().add(menuItem);
@@ -203,7 +210,7 @@ public class MetricsMatcher implements Initializable {
 
         touchRunState();
 
-        if (matcher.getMetricsProfiles().isEmpty()) {
+        if (selectedMetricsProfiles.isEmpty()) {
             if (previousSelection.isEmpty() && !metricsProfilesMenu.getItems().isEmpty()) {
                 CheckMenuItem firstMenuItem = (CheckMenuItem) metricsProfilesMenu.getItems().get(0);
                 firstMenuItem.setSelected(true);
@@ -219,6 +226,7 @@ public class MetricsMatcher implements Initializable {
         try {
             queries = AssetsLoader.loadQueries("queries");
         } catch (MetricsException e) {
+            queries = Collections.emptyList();
             ErrorDialog.showError("Can't read queries", e, HelpRefs.QUERIES);
         }
     }
@@ -231,6 +239,11 @@ public class MetricsMatcher implements Initializable {
         }
     }
 
+    @SneakyThrows
+    private static void sleep() {
+        Thread.sleep((long) (Math.random() * 1000));
+    }
+
     public void runAction() {
         runLockMenuItems(true);
 
@@ -238,14 +251,17 @@ public class MetricsMatcher implements Initializable {
         progressBar.setVisible(true);
         progressBar.setProgress(0);
 
-        final double step = 1d / matcher.getTasks().size();
+        final double step = 1d / tasks.size();
 
         new Thread(() -> {
             try {
-                matcher.run(() -> Platform.runLater(() -> {
-                    table.refresh();
-                    progressBar.setProgress(progressBar.getProgress() + step);
-                }));
+                matcher.run(selectedDataSource, tasks, () -> {
+                    Platform.runLater(() -> {
+                        table.refresh();
+                        progressBar.setProgress(progressBar.getProgress() + step);
+                    });
+                    sleep();
+                });
             } catch (MetricsException e) {
                 ErrorDialog.showError("Can't run tasks", e);
             }
@@ -264,7 +280,7 @@ public class MetricsMatcher implements Initializable {
         int countError = 0;
         int countMismatch = 0;
         int countSkip = 0;
-        for (Task task : matcher.getTasks()) {
+        for (Task task : tasks) {
             switch (task.getStatus()) {
                 case OK:
                     countOk++;
@@ -301,7 +317,7 @@ public class MetricsMatcher implements Initializable {
     }
 
     private void touchRunState() {
-        runMenuItem.setDisable(matcher.getDataSource() == null || matcher.getMetricsProfiles().isEmpty());
+        runMenuItem.setDisable(selectedDataSource == null || selectedMetricsProfiles.isEmpty());
     }
 
     private void runLockMenuItems(boolean lock) {

@@ -27,7 +27,16 @@
     "name": "Broken queries",
     "metrics": {
       "select-broken": "Abc321",
-      "select-none": 1
+      "select-not-found": 1
+    }
+  },
+  {
+    "name": "Parameterized queries",
+    "metrics": {
+      "select-params": "ABC-123"
+    },
+    "params": {
+      "concatString": "123"
     }
   },
   {

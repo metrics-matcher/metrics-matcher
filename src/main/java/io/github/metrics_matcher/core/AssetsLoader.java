@@ -27,6 +27,7 @@ public final class AssetsLoader {
     private static final String MSG_CAN_NOT_READ = "Can't read file \"%s\"";
     private static final String MSG_CAN_NOT_PARSE = "Can't parse file \"%s\"";
     private static final String MSG_FILES_NOT_FOUND = "Files not found in \"%s\"";
+    private static final String SQL_FILE_EXTENSION = ".sql";
 
     private static final Gson GSON = new Gson();
 
@@ -75,7 +76,7 @@ public final class AssetsLoader {
         for (File file : files) {
             String filename = file.getName();
             log.info("Loading query [{}]", filename);
-            String id = filename.substring(0, filename.length() - 4).trim();
+            String id = filename.substring(0, filename.length() - SQL_FILE_EXTENSION.length()).trim();
             try {
                 List<String> lines = Files.readAllLines(file.toPath());
                 String title = null;

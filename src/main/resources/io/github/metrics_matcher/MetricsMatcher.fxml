@@ -43,22 +43,27 @@
                 <TableColumn fx:id="rownumColumn" text="#" prefWidth="30" sortable="false"/>
                 <TableColumn text="Metrics profile" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="metricsProfile"/>
+                        <PropertyValueFactory property="metricsProfileName"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Query" sortable="false">
+                <TableColumn text="Metrics id" sortable="false">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="metricsId"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Query title" sortable="false">
                     <cellValueFactory>
                         <PropertyValueFactory property="queryTitle"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Expected value" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="expected"/>
+                        <PropertyValueFactory property="expectedValue"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Actual value" sortable="false">
                     <cellValueFactory>
-                        <PropertyValueFactory property="result"/>
+                        <PropertyValueFactory property="resultValue"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="executionStatus" text="Execution status" sortable="false">
