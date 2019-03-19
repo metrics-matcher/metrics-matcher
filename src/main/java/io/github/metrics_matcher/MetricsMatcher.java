@@ -6,7 +6,6 @@ import io.github.metrics_matcher.core.MetricsException;
 import io.github.metrics_matcher.core.Task;
 import io.github.metrics_matcher.dialogs.AboutDialog;
 import io.github.metrics_matcher.dialogs.ErrorDialog;
-import io.github.metrics_matcher.dialogs.NotImplementedDialog;
 import io.github.metrics_matcher.dto.DataSource;
 import io.github.metrics_matcher.dto.MetricsProfile;
 import io.github.metrics_matcher.dto.Query;
@@ -226,6 +225,8 @@ public class MetricsMatcher implements Initializable {
             } else {
                 selectedMetricsProfilesLabel.setText("0");
             }
+        } else {
+            tasks.setAll(Task.tasksFrom(selectedMetricsProfiles, queries));
         }
     }
 
@@ -334,15 +335,11 @@ public class MetricsMatcher implements Initializable {
         dataSourceMenu.getItems().forEach(menuItem -> menuItem.setDisable(lock));
     }
 
-    public final void showNotImplemented() {
-        NotImplementedDialog.show();
-    }
-
     public final void synchronizeAction() {
         loadQueries();
+        loadDrivers();
         reloadDataSources();
         reloadMetricsProfiles();
-        loadDrivers();
     }
 
     public final void exitAction() {

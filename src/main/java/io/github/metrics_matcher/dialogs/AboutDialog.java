@@ -14,9 +14,9 @@ public class AboutDialog {
     @SuppressWarnings("checkstyle:MagicNumber")
     public static void show() {
         Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-        dialog.setTitle("About");
+        dialog.setTitle("Metrics matcher: magic mushrooms");
         dialog.initStyle(StageStyle.UTILITY);
-        dialog.setHeaderText("Metrics matcher is a free database testing tool.\n"
+        dialog.setHeaderText("Metrics matcher is a data matching tool.\n"
                 + "Copyright (c) 2019 Metrics matcher, Xantorohara\n"
                 + "MIT License"
         );
