@@ -2,7 +2,7 @@ package io.github.metrics_matcher.core;
 
 import io.github.metrics_matcher.dto.DataSource;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
+@Log
 @Data
 public class Matcher {
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -69,7 +69,7 @@ public class Matcher {
                 }
             }
         } catch (SQLException e) {
-            log.error("Can't close database connection", e);
+            log.severe("Can't close database connection." + e.getMessage());
             throw new MetricsException("Can't database connection", e);
         }
     }

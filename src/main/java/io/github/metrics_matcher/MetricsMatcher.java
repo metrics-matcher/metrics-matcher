@@ -21,7 +21,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Slf4j
+@Log
 @SuppressWarnings("checkstyle:VisibilityModifier")
 public class MetricsMatcher implements Initializable {
 
@@ -364,7 +364,7 @@ public class MetricsMatcher implements Initializable {
         try {
             Desktop.getDesktop().browse(new URI(HelpRefs.HELP_URL));
         } catch (IOException | URISyntaxException ex) {
-            log.error("Can't open web browser", ex);
+            log.severe("Can't open web browser. " + ex.getMessage());
         }
     }
 

@@ -6,9 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class AboutDialog {
 
     @SuppressWarnings("checkstyle:MagicNumber")
