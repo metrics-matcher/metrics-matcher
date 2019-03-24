@@ -29,40 +29,43 @@ public class Matcher {
         tasks.forEach(Task::reset);
 
         try (Jdbc jdbc = new Jdbc()) {
-            for (Task task : tasks) {
-                if (stop || hasError && stopOnError || hasMismatch && stopOnMismatch) {
-                    task.setSkipState();
-                    if (progress != null) {
-                        progress.run();
-                    }
-                    continue;
-                }
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                Task nextTask = i < tasks.size() - 1 ? tasks.get(i + 1) : null;
 
                 long timestamp = System.currentTimeMillis();
-                try {
-                    Object result = jdbc.execute(dataSource, task.getQuerySql());
+                if (stop || hasError && stopOnError || hasMismatch && stopOnMismatch) {
+                    task.setSkipState();
+                } else {
+                    try {
+                        Object result = jdbc.execute(dataSource, task.getQuerySql());
 
-                    if (result == null) {
-                        result = "null";
-                    } else if (result instanceof Date) {
-                        result = formatDate((Date) result, task.getExpectedValue());
-                    }
+                        if (result == null) {
+                            result = "null";
+                        } else if (result instanceof Date) {
+                            result = formatDate((Date) result, task.getExpectedValue());
+                        }
 
-                    if (result == Jdbc.SpecialResult.NO_RESULT || result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
-                        task.setErrorState(result.toString());
+                        if (result == Jdbc.SpecialResult.NO_RESULT || result == Jdbc.SpecialResult.MULTIPLE_ROWS) {
+                            task.setErrorState(result.toString());
+                            hasError = true;
+                        } else if (Objects.equals(result.toString(), task.getExpectedValue())) {
+                            task.setOkState(result.toString());
+                        } else {
+                            task.setMismatchState(result.toString());
+                            hasMismatch = true;
+                        }
+                    } catch (SQLException e) {
+                        task.setErrorState(formatError(e));
                         hasError = true;
-                    } else if (Objects.equals(result.toString(), task.getExpectedValue())) {
-                        task.setOkState(result.toString());
-                    } else {
-                        task.setMismatchState(result.toString());
-                        hasMismatch = true;
                     }
-                } catch (SQLException e) {
-                    task.setErrorState(formatError(e));
-                    hasError = true;
                 }
 
                 task.setDuration(round3(System.currentTimeMillis() - timestamp));
+
+                if (nextTask != null) {
+                    nextTask.setRunningState();
+                }
 
                 if (progress != null) {
                     progress.run();

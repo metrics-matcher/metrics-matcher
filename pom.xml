@@ -106,8 +106,8 @@
                         <configuration>
                             <appendAssemblyId>true</appendAssemblyId>
                             <descriptors>
+                                <descriptor>src/misc/assembly-core.xml</descriptor>
                                 <descriptor>src/misc/assembly-demo.xml</descriptor>
-                                <descriptor>src/misc/assembly-mini.xml</descriptor>
                                 <descriptor>src/misc/assembly-oracle.xml</descriptor>
                             </descriptors>
                         </configuration>
