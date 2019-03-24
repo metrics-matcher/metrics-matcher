@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +19,8 @@ public class MatcherTest {
         return Task.builder().querySql(sql).expectedValue(expectedValue).build();
     }
 
-    private static final Runnable PROGRESS = () -> {};
+    private static final Consumer<Integer> PROGRESS = (i) -> {
+    };
 
     @Test
     public void run_checkIntegerMatch() throws MetricsException {
@@ -165,7 +167,7 @@ public class MatcherTest {
     public void run_emptyTasks() throws MetricsException {
         List<Task> tasks = Collections.emptyList();
         Matcher matcher = new Matcher();
-        matcher.run(DATA_SOURCE, tasks, null);
+        matcher.run(DATA_SOURCE, tasks, PROGRESS);
     }
 
     @Test
@@ -177,7 +179,7 @@ public class MatcherTest {
         );
         Matcher matcher = new Matcher();
         matcher.setStopOnMismatch(true);
-        matcher.run(DATA_SOURCE, tasks, null);
+        matcher.run(DATA_SOURCE, tasks, PROGRESS);
 
         assertThat(tasks.get(0).getStatus()).isEqualTo(Task.Status.OK);
         assertThat(tasks.get(1).getStatus()).isEqualTo(Task.Status.MISMATCH);
@@ -193,7 +195,7 @@ public class MatcherTest {
         );
         Matcher matcher = new Matcher();
         matcher.setStopOnError(true);
-        matcher.run(DATA_SOURCE, tasks, null);
+        matcher.run(DATA_SOURCE, tasks, PROGRESS);
 
         assertThat(tasks.get(0).getStatus()).isEqualTo(Task.Status.OK);
         assertThat(tasks.get(1).getStatus()).isEqualTo(Task.Status.ERROR);

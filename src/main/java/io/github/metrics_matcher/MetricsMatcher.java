@@ -18,7 +18,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.awt.*;
@@ -245,12 +244,6 @@ public class MetricsMatcher implements Initializable {
         }
     }
 
-    @SneakyThrows
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private static void sleep() {
-        Thread.sleep((long) (Math.random() * 3000));
-    }
-
     public void runAction() {
         runLockMenuItems(true);
 
@@ -262,12 +255,11 @@ public class MetricsMatcher implements Initializable {
 
         new Thread(() -> {
             try {
-                matcher.run(selectedDataSource, tasks, () -> {
+                matcher.run(selectedDataSource, tasks, i -> {
                     Platform.runLater(() -> {
                         table.refresh();
-                        progressBar.setProgress(progressBar.getProgress() + step);
+                        progressBar.setProgress(i * step);
                     });
-                    sleep();
                 });
             } catch (MetricsException e) {
                 ErrorDialog.show("Can't run tasks", e);

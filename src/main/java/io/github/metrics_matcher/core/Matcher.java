@@ -2,6 +2,7 @@ package io.github.metrics_matcher.core;
 
 import io.github.metrics_matcher.dto.DataSource;
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 @Log
 @Data
@@ -20,13 +22,18 @@ public class Matcher {
     private volatile boolean stopOnMismatch;
     private volatile boolean stopOnError;
 
-    public final void run(DataSource dataSource, List<Task> tasks, Runnable progress)
+    public final void run(DataSource dataSource, List<Task> tasks, Consumer<Integer> progress)
             throws MetricsException {
         stop = false;
         boolean hasError = false;
         boolean hasMismatch = false;
 
         tasks.forEach(Task::reset);
+
+        if (!tasks.isEmpty()) {
+            tasks.get(0).setRunningState();
+            progress.accept(0);
+        }
 
         try (Jdbc jdbc = new Jdbc()) {
             for (int i = 0; i < tasks.size(); i++) {
@@ -39,6 +46,8 @@ public class Matcher {
                 } else {
                     try {
                         Object result = jdbc.execute(dataSource, task.getQuerySql());
+
+//                        sleep();
 
                         if (result == null) {
                             result = "null";
@@ -67,9 +76,7 @@ public class Matcher {
                     nextTask.setRunningState();
                 }
 
-                if (progress != null) {
-                    progress.run();
-                }
+                progress.accept(i);
             }
         } catch (SQLException e) {
             log.severe("Can't close database connection." + e.getMessage());
@@ -94,4 +101,11 @@ public class Matcher {
     private static String formatError(Exception e) {
         return e.getMessage().replaceAll("\\r\\n|\\r|\\n", " ");
     }
+
+    @SneakyThrows
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private static void sleep() {
+        Thread.sleep((long) (Math.random() * 3000));
+    }
+
 }
