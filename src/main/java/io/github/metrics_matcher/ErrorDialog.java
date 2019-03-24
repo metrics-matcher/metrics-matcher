@@ -1,4 +1,4 @@
-package io.github.metrics_matcher.dialogs;
+package io.github.metrics_matcher;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;

@@ -4,8 +4,6 @@ import io.github.metrics_matcher.core.AssetsLoader;
 import io.github.metrics_matcher.core.Matcher;
 import io.github.metrics_matcher.core.MetricsException;
 import io.github.metrics_matcher.core.Task;
-import io.github.metrics_matcher.dialogs.AboutDialog;
-import io.github.metrics_matcher.dialogs.ErrorDialog;
 import io.github.metrics_matcher.dto.DataSource;
 import io.github.metrics_matcher.dto.MetricsProfile;
 import io.github.metrics_matcher.dto.Query;
@@ -250,7 +248,7 @@ public class MetricsMatcher implements Initializable {
     @SneakyThrows
     @SuppressWarnings("checkstyle:MagicNumber")
     private static void sleep() {
-        Thread.sleep((long) (Math.random() * 1000));
+        Thread.sleep((long) (Math.random() * 3000));
     }
 
     public void runAction() {
@@ -269,7 +267,7 @@ public class MetricsMatcher implements Initializable {
                         table.refresh();
                         progressBar.setProgress(progressBar.getProgress() + step);
                     });
-                    //sleep();
+                    sleep();
                 });
             } catch (MetricsException e) {
                 ErrorDialog.show("Can't run tasks", e);

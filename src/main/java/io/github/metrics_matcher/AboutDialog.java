@@ -1,4 +1,4 @@
-package io.github.metrics_matcher.dialogs;
+package io.github.metrics_matcher;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -18,11 +18,11 @@ public class AboutDialog {
                 + "Copyright (c) 2019 Metrics matcher, Xantorohara\n"
                 + "MIT License"
         );
-        dialog.setGraphic(new ImageView(new Image(AboutDialog.class.getResourceAsStream("../images/icon.png"))));
+        dialog.setGraphic(new ImageView(new Image(AboutDialog.class.getResourceAsStream("images/icon.png"))));
 
 
         BackgroundImage backgroundImage = new BackgroundImage(
-                new Image(AboutDialog.class.getResourceAsStream("../images/mushrooms.png")),
+                new Image(AboutDialog.class.getResourceAsStream("images/mushrooms.png")),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,

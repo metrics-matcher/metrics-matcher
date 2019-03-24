@@ -8,7 +8,7 @@
 
     <fileSets>
         <fileSet>
-            <directory>variants/mini</directory>
+            <directory>variants/core</directory>
             <outputDirectory>./</outputDirectory>
             <filtered>false</filtered>
             <includes>
