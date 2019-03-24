@@ -4,9 +4,6 @@ import io.github.metrics_matcher.core.AssetsLoader;
 import io.github.metrics_matcher.core.Matcher;
 import io.github.metrics_matcher.core.MetricsException;
 import io.github.metrics_matcher.core.Task;
-import io.github.metrics_matcher.dialogs.AboutDialog;
-import io.github.metrics_matcher.dialogs.ErrorDialog;
-import io.github.metrics_matcher.dialogs.NotImplementedDialog;
 import io.github.metrics_matcher.dto.DataSource;
 import io.github.metrics_matcher.dto.MetricsProfile;
 import io.github.metrics_matcher.dto.Query;
@@ -21,8 +18,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 import java.awt.*;
 import java.io.IOException;
@@ -34,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Slf4j
+@Log
 @SuppressWarnings("checkstyle:VisibilityModifier")
 public class MetricsMatcher implements Initializable {
 
@@ -226,6 +222,8 @@ public class MetricsMatcher implements Initializable {
             } else {
                 selectedMetricsProfilesLabel.setText("0");
             }
+        } else {
+            tasks.setAll(Task.tasksFrom(selectedMetricsProfiles, queries));
         }
     }
 
@@ -246,12 +244,6 @@ public class MetricsMatcher implements Initializable {
         }
     }
 
-    @SneakyThrows
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private static void sleep() {
-        Thread.sleep((long) (Math.random() * 1000));
-    }
-
     public void runAction() {
         runLockMenuItems(true);
 
@@ -263,12 +255,11 @@ public class MetricsMatcher implements Initializable {
 
         new Thread(() -> {
             try {
-                matcher.run(selectedDataSource, tasks, () -> {
+                matcher.run(selectedDataSource, tasks, i -> {
                     Platform.runLater(() -> {
                         table.refresh();
-                        progressBar.setProgress(progressBar.getProgress() + step);
+                        progressBar.setProgress(i * step);
                     });
-                    //sleep();
                 });
             } catch (MetricsException e) {
                 ErrorDialog.show("Can't run tasks", e);
@@ -334,15 +325,11 @@ public class MetricsMatcher implements Initializable {
         dataSourceMenu.getItems().forEach(menuItem -> menuItem.setDisable(lock));
     }
 
-    public final void showNotImplemented() {
-        NotImplementedDialog.show();
-    }
-
     public final void synchronizeAction() {
         loadQueries();
+        loadDrivers();
         reloadDataSources();
         reloadMetricsProfiles();
-        loadDrivers();
     }
 
     public final void exitAction() {
@@ -367,7 +354,7 @@ public class MetricsMatcher implements Initializable {
         try {
             Desktop.getDesktop().browse(new URI(HelpRefs.HELP_URL));
         } catch (IOException | URISyntaxException ex) {
-            log.error("Can't open web browser", ex);
+            log.severe("Can't open web browser. " + ex.getMessage());
         }
     }
 

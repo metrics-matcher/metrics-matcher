@@ -22,13 +22,17 @@ public class Task {
     private Double duration;
 
     public enum Status {
-        OK, MISMATCH, ERROR, SKIP
+        OK, MISMATCH, ERROR, SKIP, RUNNING
     }
 
     public void reset() {
         resultValue = null;
         status = null;
         duration = null;
+    }
+
+    public void setRunningState() {
+        this.status = Status.RUNNING;
     }
 
     public void setOkState(String resultValue) {

@@ -26,8 +26,11 @@
   {
     "name": "Broken queries",
     "metrics": {
-      "select-broken": "Abc321",
-      "select-not-found": 1
+      "update-data": 1,
+      "select-bad-empty-result": 1,
+      "select-bad-table-not-found": 1,
+      "select-bad-multi-results": 1,
+      "select-query-not-found": 1
     }
   },
   {
@@ -36,19 +39,7 @@
       "select-params": "ABC-123"
     },
     "params": {
-      "concatString": "123"
-    }
-  },
-  {
-    "name": "Dummy study full check",
-    "params": {
-      "studyId": "DUMMY_STUDY"
-    },
-    "metrics": {
-      "patients-total": 234,
-      "patients-dosed": 123,
-      "patients-min-age": 20,
-      "patients-max-age": 80
+      "myParam": "123"
     }
   }
 ]

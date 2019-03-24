@@ -1,11 +1,13 @@
 package io.github.metrics_matcher.core;
 
 import io.github.metrics_matcher.dto.DataSource;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 import java.sql.*;
 
-@Slf4j
+import static java.lang.String.format;
+
+@Log
 public class Jdbc implements AutoCloseable {
 
     public enum SpecialResult {
@@ -28,7 +30,7 @@ public class Jdbc implements AutoCloseable {
 
     private void connect(DataSource ds) throws SQLException {
         if (connection == null || connection.isClosed()) {
-            log.info("Opening JDBC connection [{}]", ds.getUrl());
+            log.info(format("Opening JDBC connection [%s]", ds.getUrl()));
             DriverManager.setLoginTimeout(ds.getTimeout());
             connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
             connection.setReadOnly(true);
@@ -40,21 +42,21 @@ public class Jdbc implements AutoCloseable {
 
         try (
                 PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
-            log.info("Executing [{}]", sql);
+            log.info(format("Executing [%s]", sql));
             if (resultSet.next()) {
                 Object value = resultSet.getObject(1);
 
-                log.info("Received [{}]", value);
+                log.info(format("Received [%s]", value));
                 if (resultSet.next()) {
-                    log.warn("More than one row returned");
+                    log.warning("More than one row returned");
                     return SpecialResult.MULTIPLE_ROWS;
                 } else {
                     return value;
                 }
             } else {
-                log.warn("Empty result");
+                log.warning("Empty result");
                 return SpecialResult.NO_RESULT;
             }
         }

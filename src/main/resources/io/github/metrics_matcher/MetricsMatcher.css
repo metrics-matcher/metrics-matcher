@@ -34,41 +34,49 @@ TableView .table-row-cell:selected .table-cell {
 
 /*Colorings*/
 TableView .table-cell:ok {
-    -fx-background-color: #4AD64A;
+    /*-fx-background-color: #4AD64A;*/
+    -fx-background-color: linear-gradient(to bottom, #4AD64A, #29CC29);
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:ok {
-    -fx-background-color: #74E374;
+    /*-fx-background-color: #74E374;*/
+    -fx-background-color: linear-gradient(to bottom, #74E374, #4AD64A);
 }
 
 TableView .table-cell:mismatch {
-    -fx-background-color: #FFC758;
+    /*-fx-background-color: #FFC758;*/
+    -fx-background-color: linear-gradient(to bottom, #FFC758, #FFBB33);
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:mismatch {
-    -fx-background-color: #FFD582;
+    /*-fx-background-color: #FFD582;*/
+    -fx-background-color: linear-gradient(to bottom, #FFD582, #FFC758);
 }
 
 TableView .table-cell:error {
-    -fx-background-color: #FF5858;
+    /*-fx-background-color: #FF5858;*/
+    -fx-background-color: linear-gradient(to bottom, #FF5858, #FF3333);
     -fx-text-fill: #FFF;
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:error {
-    -fx-background-color: #FF8282;
+    /*-fx-background-color: #FF8282;*/
+    -fx-background-color: linear-gradient(to bottom, #FF8282, #FF5858);
 }
 
 TableView .table-cell:skip {
-    -fx-background-color: #4E6FBB;
+    /*-fx-background-color: #4E6FBB;*/
+    -fx-background-color: linear-gradient(to bottom, #4E6FBB, #3055AB);
     -fx-text-fill: #FFF;
     -fx-background-insets: 0 0 1 0;
 }
 
 TableView .table-row-cell:even .table-cell:skip {
-    -fx-background-color: #7691D1;
+    /*-fx-background-color: #7691D1;*/
+    -fx-background-color: linear-gradient(to bottom, #7691D1, #4E6FBB);
 }
 
 Label.counter {
