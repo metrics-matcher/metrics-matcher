@@ -26,6 +26,7 @@
   {
     "name": "Broken queries",
     "metrics": {
+      "update-data": 1,
       "select-bad-empty-result": 1,
       "select-bad-table-not-found": 1,
       "select-bad-multi-results": 1,
