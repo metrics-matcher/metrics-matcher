@@ -52,9 +52,9 @@
                         <EditableCell fx:factory="forTableColumn"/>
                     </cellFactory>
                 </TableColumn>
-                <TableColumn text="Metrics id" sortable="false" editable="true">
+                <TableColumn text="Query id" sortable="false" editable="true">
                     <cellValueFactory>
-                        <PropertyValueFactory property="metricsId"/>
+                        <PropertyValueFactory property="queryId"/>
                     </cellValueFactory>
                     <cellFactory>
                         <EditableCell fx:factory="forTableColumn"/>

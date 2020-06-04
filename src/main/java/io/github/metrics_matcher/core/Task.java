@@ -11,7 +11,7 @@ import java.util.*;
 @Builder
 public class Task {
     private final String metricsProfileName;
-    private final String metricsId;
+    private final String queryId;
     private final String queryTitle;
     private final String querySql;
 
@@ -64,7 +64,7 @@ public class Task {
                 TaskBuilder taskBuilder = Task.builder().
                         status(Status.NONE).
                         metricsProfileName(metricsProfile.getName()).
-                        metricsId(metrics.getKey()).
+                        queryId(metrics.getKey()).
                         expectedValue(Objects.toString(metrics.getValue(), "null"));
 
                 for (Query query : queries) {

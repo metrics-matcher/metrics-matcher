@@ -33,7 +33,7 @@ public class TaskTest {
         ), Collections.emptyList());
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getMetricsProfileName()).isEqualTo("Metrics Set");
-        assertThat(tasks.get(0).getMetricsId()).isEqualTo("select-1");
+        assertThat(tasks.get(0).getQueryId()).isEqualTo("select-1");
         assertThat(tasks.get(0).getQuerySql()).isNull();
         assertThat(tasks.get(0).getQueryTitle()).isEqualTo("!!! Query not found !!!");
         assertThat(tasks.get(0).getExpectedValue()).isEqualTo("1");
@@ -48,7 +48,7 @@ public class TaskTest {
         ));
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getMetricsProfileName()).isEqualTo("Metrics Set");
-        assertThat(tasks.get(0).getMetricsId()).isEqualTo("select-1");
+        assertThat(tasks.get(0).getQueryId()).isEqualTo("select-1");
         assertThat(tasks.get(0).getQuerySql()).isEqualTo("SELECT 1 FROM DUAL");
         assertThat(tasks.get(0).getQueryTitle()).isEqualTo("Select 1");
         assertThat(tasks.get(0).getExpectedValue()).isEqualTo("1");
@@ -63,7 +63,7 @@ public class TaskTest {
         ));
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getMetricsProfileName()).isEqualTo("Metrics Set");
-        assertThat(tasks.get(0).getMetricsId()).isEqualTo("select-1");
+        assertThat(tasks.get(0).getQueryId()).isEqualTo("select-1");
         assertThat(tasks.get(0).getQuerySql()).isEqualTo("SELECT 1 FROM DUAL WHERE 1=123");
         assertThat(tasks.get(0).getQueryTitle()).isEqualTo("Select 1 Where 123");
         assertThat(tasks.get(0).getExpectedValue()).isEqualTo("1");
@@ -78,7 +78,7 @@ public class TaskTest {
         ));
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getMetricsProfileName()).isEqualTo("Metrics Set");
-        assertThat(tasks.get(0).getMetricsId()).isEqualTo("select-1");
+        assertThat(tasks.get(0).getQueryId()).isEqualTo("select-1");
         assertThat(tasks.get(0).getQuerySql()).isEqualTo("SELECT 1 FROM DUAL WHERE 1=${myParam}");
         assertThat(tasks.get(0).getQueryTitle()).isEqualTo("Select 1 Where ${myParam}");
         assertThat(tasks.get(0).getExpectedValue()).isEqualTo("1");
