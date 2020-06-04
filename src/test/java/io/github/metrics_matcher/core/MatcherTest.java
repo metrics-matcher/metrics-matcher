@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MatcherTest {
 
-    private static final DataSource DATA_SOURCE = new DataSource("ds", "jdbc:h2:mem:", 100, "user", "pass");
+    private static final DataSource DATA_SOURCE = new DataSource("ds", "jdbc:h2:mem:", 100, "user", "pass", null);
 
     private static Task newTask(String sql, String expectedValue) {
         return Task.builder().querySql(sql).expectedValue(expectedValue).build();
@@ -72,7 +72,7 @@ public class MatcherTest {
 
     @Test
     public void run_checkDateMatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28', 'YYYY-MM-DD') FROM DUAL", "2019-02-28");
+        Task task = newTask("SELECT DATE '2019-02-28' FROM DUAL", "2019-02-28");
         new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
         assertThat(task.getStatus()).isEqualTo(Task.Status.OK);
         assertThat(task.getResultValue()).isEqualTo("2019-02-28");
@@ -80,7 +80,7 @@ public class MatcherTest {
 
     @Test
     public void run_checkDateMismatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28', 'YYYY-MM-DD') FROM DUAL", "2019-03-15");
+        Task task = newTask("SELECT DATE '2019-02-28' FROM DUAL", "2019-03-15");
         new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
         assertThat(task.getStatus()).isEqualTo(Task.Status.MISMATCH);
         assertThat(task.getResultValue()).isEqualTo("2019-02-28");
@@ -88,7 +88,7 @@ public class MatcherTest {
 
     @Test
     public void run_checkDateTimeMatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28 15:25:59', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL",
+        Task task = newTask("SELECT TIMESTAMP '2019-02-28 15:25:59' FROM DUAL",
                 "2019-02-28 15:25:59");
         new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
         assertThat(task.getStatus()).isEqualTo(Task.Status.OK);
@@ -97,27 +97,8 @@ public class MatcherTest {
 
     @Test
     public void run_checkDateTimeMismatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28 15:25:59', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL",
+        Task task = newTask("SELECT TIMESTAMP '2019-02-28 15:25:59' FROM DUAL",
                 "2019-02-28 13:13:13");
-        new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
-        assertThat(task.getStatus()).isEqualTo(Task.Status.MISMATCH);
-        assertThat(task.getResultValue()).isEqualTo("2019-02-28 15:25:59");
-    }
-
-
-    @Test
-    public void run_checkDateTimeDatePartMatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28 00:00:00', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL",
-                "2019-02-28");
-        new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
-        assertThat(task.getStatus()).isEqualTo(Task.Status.OK);
-        assertThat(task.getResultValue()).isEqualTo("2019-02-28");
-    }
-
-    @Test
-    public void run_checkDateTimeDatePartMismatch() throws MetricsException {
-        Task task = newTask("SELECT TO_DATE('2019-02-28 15:25:59', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL",
-                "2019-02-28");
         new Matcher().run(DATA_SOURCE, Collections.singletonList(task), PROGRESS);
         assertThat(task.getStatus()).isEqualTo(Task.Status.MISMATCH);
         assertThat(task.getResultValue()).isEqualTo("2019-02-28 15:25:59");
@@ -202,13 +183,10 @@ public class MatcherTest {
         assertThat(tasks.get(2).getStatus()).isEqualTo(Task.Status.SKIP);
     }
 
-    @Test
+    @Test(expected = MetricsException.class)
     public void run_invalidJdbc() throws MetricsException {
         Task task = newTask("SELECT 1 FROM DUAL", "1");
-        new Matcher().run(new DataSource("ds", "jdbc:invalid:", 100, "user", "pass"),
+        new Matcher().run(new DataSource("ds", "jdbc:invalid:", 100, "user", "pass", null),
                 Collections.singletonList(task), PROGRESS);
-
-        assertThat(task.getStatus()).isEqualTo(Task.Status.ERROR);
-        assertThat(task.getResultValue()).startsWith("No suitable driver found");
     }
 }

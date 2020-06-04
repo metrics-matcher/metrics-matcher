@@ -8,12 +8,15 @@
 
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import io.github.metrics_matcher.*?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml" stylesheets="@MetricsMatcher.css"
             fx:controller="io.github.metrics_matcher.MetricsMatcher">
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem fx:id="synchronizeMenuItem" text="Synchronize" onAction="#synchronizeAction"/>
+                <MenuItem fx:id="synchronizeMenuItem" text="Synchronize" onAction="#synchronizeAction"
+                          accelerator="Shortcut+R"/>
                 <SeparatorMenuItem/>
                 <MenuItem text="Exit" onAction="#exitAction"/>
             </Menu>
@@ -38,38 +41,61 @@
     </top>
     <center>
 
-        <TableView fx:id="table">
+        <TableView fx:id="table" editable="true">
             <columns>
                 <TableColumn fx:id="rownumColumn" text="#" prefWidth="30" sortable="false"/>
-                <TableColumn text="Metrics profile" sortable="false">
+                <TableColumn text="Metrics profile" sortable="false" editable="true">
                     <cellValueFactory>
                         <PropertyValueFactory property="metricsProfileName"/>
                     </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn text="Metrics id" sortable="false">
+                <TableColumn text="Metrics id" sortable="false" editable="true">
                     <cellValueFactory>
                         <PropertyValueFactory property="metricsId"/>
                     </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn text="Query title" sortable="false">
+                <TableColumn text="Query title" sortable="false" editable="true">
                     <cellValueFactory>
                         <PropertyValueFactory property="queryTitle"/>
                     </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn text="Expected value" sortable="false">
+                <TableColumn text="Expected value" sortable="false" editable="true">
                     <cellValueFactory>
                         <PropertyValueFactory property="expectedValue"/>
                     </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn text="Actual value" sortable="false">
+                <TableColumn text="Actual value" sortable="false" editable="true">
                     <cellValueFactory>
                         <PropertyValueFactory property="resultValue"/>
                     </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
                 <TableColumn fx:id="executionStatus" text="Execution status" sortable="false">
                     <cellValueFactory>
                         <PropertyValueFactory property="status"/>
                     </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Additional result" sortable="false" editable="true" prefWidth="150">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="additionalResult"/>
+                    </cellValueFactory>
+                    <cellFactory>
+                        <EditableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
                 </TableColumn>
                 <TableColumn text="Execution time" sortable="false">
                     <cellValueFactory>

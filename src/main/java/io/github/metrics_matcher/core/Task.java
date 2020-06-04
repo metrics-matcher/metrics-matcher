@@ -19,16 +19,18 @@ public class Task {
 
     private String resultValue;
     private Status status;
-    private Double duration;
+    private String duration;
+    private String additionalResult;
 
     public enum Status {
-        OK, MISMATCH, ERROR, SKIP, RUNNING
+        OK, MISMATCH, ERROR, SKIP, RUNNING, NONE
     }
 
     public void reset() {
+        status = Status.NONE;
         resultValue = null;
-        status = null;
         duration = null;
+        additionalResult = null;
     }
 
     public void setRunningState() {
@@ -60,6 +62,7 @@ public class Task {
         for (MetricsProfile metricsProfile : metricsProfiles) {
             for (Map.Entry<String, String> metrics : metricsProfile.getMetrics().entrySet()) {
                 TaskBuilder taskBuilder = Task.builder().
+                        status(Status.NONE).
                         metricsProfileName(metricsProfile.getName()).
                         metricsId(metrics.getKey()).
                         expectedValue(Objects.toString(metrics.getValue(), "null"));

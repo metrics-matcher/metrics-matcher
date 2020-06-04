@@ -17,7 +17,7 @@ public class ErrorDialog {
     private static final String ERROR_TITLE = "Error";
 
     public static void show(String problem, Exception e) {
-        log.severe(problem + "" + e.getMessage());
+        log.severe(problem + ": " + e.getMessage());
 
         Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
         alert.setTitle(ERROR_TITLE);
@@ -26,7 +26,7 @@ public class ErrorDialog {
     }
 
     public static void show(String problem, Exception e, String helpUrl) {
-        log.severe(problem + "" + e.getMessage());
+        log.severe(problem + ": " + e.getMessage());
 
         ButtonType troubleshooting = new ButtonType("See how to troubleshoot this", ButtonBar.ButtonData.HELP);
 
@@ -39,7 +39,7 @@ public class ErrorDialog {
             try {
                 Desktop.getDesktop().browse(new URI(helpUrl));
             } catch (IOException | URISyntaxException ex) {
-                log.severe("Can't open web browser. " + ex.getMessage());
+                log.severe("Can't open web browser: " + ex.getMessage());
             }
         }
     }

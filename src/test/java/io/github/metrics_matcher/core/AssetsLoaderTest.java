@@ -63,7 +63,7 @@ public class AssetsLoaderTest {
     @Test
     public void loadQueries_Correct() throws MetricsException {
         List<Query> items = AssetsLoader.loadQueries("src/test/resources/sqls");
-        assertThat(items).hasSize(2);
+        assertThat(items).hasSize(3);
         assertThat(items.get(0).getId()).isEqualTo("select-1");
         assertThat(items.get(0).getTitle()).isEqualTo("Connection check");
         assertThat(items.get(0).getSql()).isEqualTo("SELECT 1 FROM DUAL");
@@ -71,6 +71,10 @@ public class AssetsLoaderTest {
         assertThat(items.get(1).getId()).isEqualTo("select-1-notitle");
         assertThat(items.get(1).getTitle()).isNull();
         assertThat(items.get(1).getSql()).isEqualTo("SELECT 1 FROM DUAL");
+
+        assertThat(items.get(2).getId()).isEqualTo("subdir/select-2");
+        assertThat(items.get(2).getTitle()).isEqualTo("Query from subdirectory");
+        assertThat(items.get(2).getSql()).isEqualTo("SELECT 2 FROM DUAL");
     }
 
     @Test(expected = MetricsException.class)

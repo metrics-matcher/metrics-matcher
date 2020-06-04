@@ -93,7 +93,7 @@ public class MetricsMatcher implements Initializable {
 
                 toggleRowClass(this, item);
 
-                if (item == null || empty) {
+                if (item == null || item == Task.Status.NONE || empty) {
                     setText(null);
                     setGraphic(null);
                 } else {
@@ -155,7 +155,7 @@ public class MetricsMatcher implements Initializable {
                 selectedDataSourceLabel.setText(dataSource.getName());
                 touchRunState();
             });
-            if (dataSource.equals(previousSelection)) {
+            if (previousSelection != null && dataSource.getName().equals(previousSelection.getName())) {
                 selectedDataSource = dataSource;
                 selectedDataSourceLabel.setText(dataSource.getName());
                 menuItem.setSelected(true);
@@ -262,7 +262,9 @@ public class MetricsMatcher implements Initializable {
                     });
                 });
             } catch (MetricsException e) {
-                ErrorDialog.show("Can't run tasks", e);
+                Platform.runLater(() -> {
+                    ErrorDialog.show("Can't run tasks", e);
+                });
             }
             Platform.runLater(() -> {
                 progressBar.setVisible(false);
